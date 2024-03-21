@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1711026909 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.c
+	<gl/gl.h>
+	"picture_loader.h"
+	"stb-master/stb_image.h"
+
+1711026909 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.h
+
+1711026909 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\stb-master\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
