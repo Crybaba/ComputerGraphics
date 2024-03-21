@@ -43,9 +43,9 @@ typedef struct {
 } Button;
 
 Button buttons[] = {
-    {MESSAGE, "message", {0,0, 100,0, 100,30, 0,30}, {0.1f,0.1f,0.5f}, FALSE},
-    {RENDER, "render", {0,40, 100,40, 100,70, 0,70}, {0.5f,0.5f,0.1f}, FALSE},
-    {TERMINATE, "terminate", {0,80, 100,80, 100,110, 0,110}, {0.5f,0.1f,0.5f}, FALSE},
+    {MESSAGE, "message", {0,0, 100,0, 100,30, 0,30}, {1.0f,1.0f,1.0f}, FALSE},
+    {RENDER, "render", {0,40, 100,40, 100,70, 0,70}, {0.0f,0.0f,1.0f}, FALSE},
+    {TERMINATE, "terminate", {0,80, 100,80, 100,110, 0,110}, {1.0f,0.0f,0.0f}, FALSE},
 };
 
 int buttonCounter = sizeof(buttons) / sizeof(buttons[0]);
