@@ -2,7 +2,7 @@
 #include "picture_loader.h"
 #include "stb-master/stb_image.h"
 
-void aaa(char *filename, GLuint *texture)
+void LoadPicture(char *filename, GLuint *texture)
 {
     int width, hight, cnt;
     unsigned char *data = stbi_load(filename, &width, &hight, &cnt, 0);
@@ -20,11 +20,10 @@ void aaa(char *filename, GLuint *texture)
     stbi_image_free(data);
 }
 
-void ddd(GLuint picture)
+void RenderPicture(GLuint picture)
 {
     static float svertix[] = {-1,-1,0, 1,-1,0, 1,1,0, -1,1,0};
-    static float TexCord[] = {0,0, 1,0, 1,1, 0,1};
-
+    static float TexCord[] = {0,1, 1,1, 1,0, 0,0};
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, picture);
 

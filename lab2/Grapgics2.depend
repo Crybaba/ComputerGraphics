@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1711026010 source:c:\Рабочий стол\opengl\cg_2\cg_2\main.c
+1711295964 source:c:\Рабочий стол\opengl\cg_2\cg_2\main.c
 	<windows.h>
 	<gl/gl.h>
 	"stb-master/stb_image.h"
@@ -10,7 +10,7 @@
 	<stdlib.h>
 	<math.h>
 
-1711026054 source:c:\Рабочий стол\opengl\cg_2\cg_2\picture_loader.c
+1711296012 source:c:\Рабочий стол\opengl\cg_2\cg_2\picture_loader.c
 	<gl/gl.h>
 	"picture_loader.h"
 	"stb-master/stb_image.h"

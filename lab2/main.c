@@ -2,14 +2,13 @@
 #include <gl/gl.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
-#include "stb-master/stb_easy_font.h" // Include the stb_easy_font.h header file
-
-// Define the maximum length for button text
-#define MAX_BUTTON_TEXT_LENGTH 20
-
+#include "stb-master/stb_easy_font.h"
 #define MESSAGE 0
 #define RENDER 1
 #define TERMINATE 2
+
+#define WINDOW_HEIGHT 500
+#define WINDOW_WIDTH 500
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
@@ -19,36 +18,18 @@ int width, height;
 unsigned int texture;
 BOOL IsImageOnScreen = FALSE;
 
-void LoadPicture()
-{
-    int width, hight, cnt;
-    unsigned char *data = stbi_load("back.jpg", &width, &hight, &cnt, 0);
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, hight, 0, cnt == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    stbi_image_free(data);
-}
-
 typedef struct {
     int id;
-    char name[MAX_BUTTON_TEXT_LENGTH]; // Include text field for button
+    char name[20];
     float vert[8];
     float color[3];
     BOOL isActive;
 } Button;
 
 Button buttons[] = {
-    {MESSAGE, "message", {200,20, 300,20, 300,40, 200,40}, {1.0f,1.0f,1.0f}, FALSE},
-    {RENDER, "render", {200,60, 300,60, 300,80, 200,80}, {0.0f,0.0f,1.0f}, FALSE},
-    {TERMINATE, "terminate", {200,100, 300,100, 300,120, 200,120}, {1.0f,0.0f,0.0f}, FALSE},
+    {MESSAGE, "message",{25,40, 225,40, 225,70, 25,70}, {1.0f,1.0f,1.0f}, FALSE},
+    {RENDER, "render",{25,80, 225,80, 225,110, 25,110}, {0.0f,0.0f,1.0f}, FALSE},
+    {TERMINATE, "terminate",{25,120, 225,120, 225,150, 25,150}, {1.0f,0.0f,0.0f}, FALSE},
 };
 
 int buttonCounter = sizeof(buttons) / sizeof(buttons[0]);
@@ -69,8 +50,12 @@ void ButtonShow(Button button)
 
     static char buffer[99999]; // ~500 chars
     int num_quads;
-    num_quads = stb_easy_font_print(button.vert[0]+30, button.vert[1]+10, button.name, NULL, buffer , sizeof(buffer));
-
+    num_quads = stb_easy_font_print((button.vert[0]+button.vert[2]+button.vert[4]+button.vert[6])/4-sizeof(button.name),
+                                    (button.vert[1]+button.vert[3]+button.vert[5]+button.vert[7])/4,
+                                    button.name,
+                                    NULL,
+                                    buffer,
+                                    sizeof(buffer));
     stb_easy_font_spacing(1);
 
     glColor3f(0.0f,0.0f,0.0f);
@@ -79,32 +64,6 @@ void ButtonShow(Button button)
     glDrawArrays(GL_QUADS, 0, num_quads*4);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
-
-void RenderPicture()
-{
-    static float svertix[] = {-1,-1,0, 1,-1,0, 1,1,0, -1,1,0};
-    static float TexCord[] = {0,1, 1,1, 1,0, 0,0};
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glColor3f(1,1,1);
-    glPushMatrix();
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glVertexPointer(3, GL_FLOAT, 0, svertix);
-        glTexCoordPointer(2, GL_FLOAT, 0, TexCord);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glPopMatrix();
-}
-
 
 void ShowMenu()
 {
@@ -171,8 +130,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                           WS_OVERLAPPEDWINDOW,
                           CW_USEDEFAULT,
                           CW_USEDEFAULT,
-                          500,
-                          500,
+                          WINDOW_WIDTH,
+                          WINDOW_HEIGHT,
                           NULL,
                           NULL,
                           hInstance,
@@ -182,7 +141,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
 
-    LoadPicture();
+    LoadPicture("Background.jpg", &texture);
 
     /* program main loop */
     while (!bQuit)
@@ -212,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
             }
             else
             {
-                RenderPicture();
+                RenderPicture(texture);
             }
             SwapBuffers(hDC);
         }
