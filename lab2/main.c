@@ -2,9 +2,15 @@
 #include <gl/gl.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
+#include "stb-master/stb_easy_font.h" // Include the stb_easy_font.h header file
+
+// Define the maximum length for button text
+#define MAX_BUTTON_TEXT_LENGTH 20
+
 #define MESSAGE 0
 #define RENDER 1
 #define TERMINATE 2
+
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
@@ -12,7 +18,6 @@ void DisableOpenGL(HWND, HDC, HGLRC);
 int width, height;
 unsigned int texture;
 BOOL IsImageOnScreen = FALSE;
-
 
 void LoadPicture()
 {
@@ -32,20 +37,18 @@ void LoadPicture()
     stbi_image_free(data);
 }
 
-
-
 typedef struct {
     int id;
-    char name[20];
+    char name[MAX_BUTTON_TEXT_LENGTH]; // Include text field for button
     float vert[8];
     float color[3];
     BOOL isActive;
 } Button;
 
 Button buttons[] = {
-    {MESSAGE, "message", {0,0, 100,0, 100,30, 0,30}, {1.0f,1.0f,1.0f}, FALSE},
-    {RENDER, "render", {0,40, 100,40, 100,70, 0,70}, {0.0f,0.0f,1.0f}, FALSE},
-    {TERMINATE, "terminate", {0,80, 100,80, 100,110, 0,110}, {1.0f,0.0f,0.0f}, FALSE},
+    {MESSAGE, "message", {200,20, 300,20, 300,40, 200,40}, {1.0f,1.0f,1.0f}, FALSE},
+    {RENDER, "render", {200,60, 300,60, 300,80, 200,80}, {0.0f,0.0f,1.0f}, FALSE},
+    {TERMINATE, "terminate", {200,100, 300,100, 300,120, 200,120}, {1.0f,0.0f,0.0f}, FALSE},
 };
 
 int buttonCounter = sizeof(buttons) / sizeof(buttons[0]);
@@ -62,6 +65,18 @@ void ButtonShow(Button button)
     if (button.isActive) glColor3f(button.color[0]/2, button.color[1]/2, button.color[2]/2);
     glVertexPointer(2, GL_FLOAT, 0, button.vert);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    static char buffer[99999]; // ~500 chars
+    int num_quads;
+    num_quads = stb_easy_font_print(button.vert[0]+30, button.vert[1]+10, button.name, NULL, buffer , sizeof(buffer));
+
+    stb_easy_font_spacing(1);
+
+    glColor3f(0.0f,0.0f,0.0f);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 16, buffer);
+    glDrawArrays(GL_QUADS, 0, num_quads*4);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
