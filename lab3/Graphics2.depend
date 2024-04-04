@@ -1,0 +1,69 @@
+# depslib dependency file v1.0
+1711296312 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.c
+	<gl/gl.h>
+	"picture_loader.h"
+	"stb-master/stb_image.h"
+
+1711297383 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.h
+
+1711027394 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\stb-master\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1711297991 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\main.c
+	<windows.h>
+	<gl/gl.h>
+	"stb-master/stb_image.h"
+	"stb-master/stb_easy_font.h"
+
+1711027394 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\stb-master\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1711335771 source:g:\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab2\main.c
+	<windows.h>
+	<gl/gl.h>
+	"stb-master/stb_image.h"
+	"stb-master/stb_easy_font.h"
+
+1711027394 g:\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab2\stb-master\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1711027394 g:\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab2\stb-master\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1711296312 source:g:\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.c
+	<gl/gl.h>
+	"picture_loader.h"
+	"stb-master/stb_image.h"
+
+1711297383 g:\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab2\picture_loader.h
+
