@@ -48,21 +48,26 @@ void ButtonShow(Button button)
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
 
+     glPushMatrix();
     static char buffer[99999]; // ~500 chars
     int num_quads;
-    num_quads = stb_easy_font_print((button.vert[0]+button.vert[2]+button.vert[4]+button.vert[6])/4-sizeof(button.name),
-                                    (button.vert[1]+button.vert[3]+button.vert[5]+button.vert[7])/4,
+
+    num_quads = stb_easy_font_print(button.vert[0]/2+10,
+                                    button.vert[1]/2+2.5,
                                     button.name,
                                     NULL,
                                     buffer,
                                     sizeof(buffer));
+    glScalef(2.0f,2.0f,1);
     stb_easy_font_spacing(1);
 
     glColor3f(0.0f,0.0f,0.0f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 16, buffer);
     glDrawArrays(GL_QUADS, 0, num_quads*4);
+    glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY);
+
 }
 
 void ShowMenu()

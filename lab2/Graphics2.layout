@@ -2,14 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+	<File name="main.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4610" topLine="18" />
+		</Cursor>
+	</File>
 	<File name="stb-master\stb_image.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="36022" topLine="967" />
 		</Cursor>
 	</File>
-	<File name="stb-master\stb_easy_font.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="picture_loader.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="219" />
+			<Cursor1 position="431" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="picture_loader.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,14 +22,9 @@
 			<Cursor1 position="202" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="stb-master\stb_easy_font.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="837" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="picture_loader.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="431" topLine="0" />
+			<Cursor1 position="0" topLine="219" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

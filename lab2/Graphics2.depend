@@ -23,7 +23,7 @@
 	<intrin.h>
 	<arm_neon.h>
 
-1711297991 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\main.c
+1712280971 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab2\main.c
 	<windows.h>
 	<gl/gl.h>
 	"stb-master/stb_image.h"
