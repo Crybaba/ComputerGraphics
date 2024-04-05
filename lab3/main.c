@@ -1,95 +1,109 @@
 #include <windows.h>
 #include <gl/gl.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
 #include "stb-master/stb_easy_font.h"
-#define MESSAGE 0
-#define RENDER 1
-#define TERMINATE 2
+#include "menu.h"
+#define bool int
+#define true 1
+#define false 0
 
-#define WINDOW_HEIGHT 500
-#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 800
+
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+int button1 = 0;
+int button2 = 0;
+GLuint Idle_sprite, Walk_sprite, Jump_sprite, background;
+int currentFrame = 0;          // Текущий кадр анимации
+const int totalFrames = 7;     // Всего кадров в спрайт-листе
+float frameWidth = 1.0f / 7.0f;  // Ширина одного кадра в текстурных координатах
+int isMoving = 0;
+float jumpSpeed = 50.0f; // Начальная скорость прыжка
+float gravity = -5.0f; // Ускорение, действующее на персонажа при падении
+float verticalVelocity = 0.0f; // Вертикальная скорость персонажа
+bool isJumping = false; // Находится ли персонаж в прыжке
+float groundLevel = 0.0f; // Уровень "земли", ниже которого персонаж не может опуститься
+bool isAirborne = false;  // Переменная для проверки, находится ли персонаж в воздухе
+
+typedef struct {
+    float x, y;    // Позиция
+    float dx, dy;  // Скорость
+} Hero;
+
+Hero hero = {0.0f, 0.0f, 0.0f, 0.0f};
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
-int width, height;
-unsigned int texture;
-BOOL IsImageOnScreen = FALSE;
-
-typedef struct {
-    int id;
-    char name[20];
-    float vert[8];
-    float color[3];
-    BOOL isActive;
-} Button;
-
-Button buttons[] = {
-    {MESSAGE, "message",{25,40, 225,40, 225,70, 25,70}, {1.0f,1.0f,1.0f}, FALSE},
-    {RENDER, "render",{25,80, 225,80, 225,110, 25,110}, {0.0f,0.0f,1.0f}, FALSE},
-    {TERMINATE, "terminate",{25,120, 225,120, 225,150, 25,150}, {1.0f,0.0f,0.0f}, FALSE},
-};
-
-int buttonCounter = sizeof(buttons) / sizeof(buttons[0]);
-
-BOOL IsCursorOnButton(int x, int y, Button button)
+GLuint LoadTexture(const char *filename)
 {
-    return (x > button.vert[0]) && (x < button.vert[4]) && (y > button.vert[1]) && (y < button.vert[5]);
-}
-
-void ButtonShow(Button button)
-{
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glColor3f(button.color[0], button.color[1], button.color[2]);
-    if (button.isActive) glColor3f(button.color[0]/2, button.color[1]/2, button.color[2]/2);
-    glVertexPointer(2, GL_FLOAT, 0, button.vert);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    static char buffer[99999]; // ~500 chars
-    int num_quads;
-    num_quads = stb_easy_font_print((button.vert[0]+button.vert[2]+button.vert[4]+button.vert[6])/4,
-                                    (button.vert[1]+button.vert[3]+button.vert[5]+button.vert[7])/4,
-                                    button.name,
-                                    NULL,
-                                    buffer,
-                                    sizeof(buffer));
-    stb_easy_font_spacing(1);
-
-    glColor3f(0.0f,0.0f,0.0f);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(2, GL_FLOAT, 16, buffer);
-    glDrawArrays(GL_QUADS, 0, num_quads*4);
-    glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-void ShowMenu()
-{
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0,width, height,0, -1,1);
-    for(int i = 0; i < buttonCounter; i++){
-        ButtonShow(buttons[i]);
+    int width, height, cnt;
+    unsigned char *image = stbi_load(filename, &width, &height, &cnt, 0);
+    if (image == NULL) {
+        printf("Error in loading the image: %s\n", stbi_failure_reason());
+        exit(1);
     }
-    glPopMatrix();
+    printf("Loaded image '%s' with width: %d, height: %d, channels: %d\n", filename, width, height, cnt);
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, cnt == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(image);
+    return textureID;
 }
 
-void ButtonEventHandler(Button button)
+// Функция для обновления текущего кадра
+void UpdateAnimationFrame() {
+
+        currentFrame = (currentFrame + 1) % totalFrames; // Переход к следующему кадру
+
+}
+
+// Функция рендеринга анимации
+void RenderSpriteAnimation(GLuint texture, float posX, float posY, float width, float height, float scale) {
+    float texLeft = currentFrame * frameWidth;
+    float texRight = texLeft + frameWidth;
+
+    // Рассчитываем размеры спрайта с учетом масштаба
+    float scaledWidth = width * scale;
+    float scaledHeight = height * scale;
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glColor3f(1,1,1);
+    glBegin(GL_QUADS);
+        glTexCoord2f(texLeft, 0.0f); glVertex2f(posX, posY);                               // Левый верхний угол
+        glTexCoord2f(texRight, 0.0f); glVertex2f(posX + scaledWidth, posY);                 // Правый верхний угол
+        glTexCoord2f(texRight, 1.0f); glVertex2f(posX + scaledWidth, posY + scaledHeight);  // Правый нижний угол
+        glTexCoord2f(texLeft, 1.0f); glVertex2f(posX, posY + scaledHeight);                 // Левый нижний угол
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+void Init(HWND hwnd)
 {
-    switch (button.id)
-    {
-        case MESSAGE:
-            printf("Hello World!\n");
-        break;
-        case RENDER:
-            IsImageOnScreen = TRUE;
-        break;
-        case TERMINATE:
-            PostQuitMessage(0);
-        break;
-    }
+    Menu_AddButton("LoadSprite",10,10,100,30,1.5);
+    Menu_AddButton("DeleteSprite",10,50,100,30,1.5);
+    Menu_AddButton("Exit",10,90,100,30,2);
+
+    Idle_sprite = LoadTexture("idle.png");
+    Walk_sprite = LoadTexture("walk.png");
+    Jump_sprite = LoadTexture("jump.png");
+    //background = LoadTexture("Background.jpg");
+    RECT rct;
+    GetClientRect(hwnd, &rct);
+    groundLevel = rct.bottom - 300;
+    // Инициализация позиции героя
+    hero.x = 400.0f;  // Начальная позиция по X
+    hero.y = groundLevel;  // Начальная позиция по Y
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -97,6 +111,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
+
+
     WNDCLASSEX wcex;
     HWND hwnd;
     HDC hDC;
@@ -141,12 +157,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
 
-    LoadPicture("Background.jpg", &texture);
+    RECT rct; //создание переменной с координатами прямоуголника
+
+    glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            GetClientRect(hwnd, &rct);
+            glOrtho(0, rct.right, rct.bottom, 0, 1, -1);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+
+    Init(hwnd);
 
     /* program main loop */
     while (!bQuit)
     {
-        /* check for messages */
+          /* check for messages */
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             /* handle or dispatch messages */
@@ -165,17 +191,69 @@ int WINAPI WinMain(HINSTANCE hInstance,
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (!IsImageOnScreen)
+            Menu_ShowMenu();
+
+            float centerX = rct.right / 2.0f;
+            float posY = 150.0f;
+            float spriteWidth = 770.0f; // ширина текстуры
+            float spriteHeight = 80.0f; // высота текстуры
+
+           if (button1)
             {
-                ShowMenu();
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+                float spriteAspectRatio = (float)110 / (float)80;
+                float renderedSpriteWidth = spriteHeight * spriteAspectRatio;
+                float scale = 2.0f; // Уменьшаем масштаб спрайта
+
+                if (!isAirborne && !isMoving)
+                {
+                    glPushMatrix();
+                    UpdateAnimationFrame();
+                    RenderSpriteAnimation(Idle_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale);
+                    glPopMatrix();
+                }
+                else if (isAirborne)
+                    {
+                        glPushMatrix();
+                        UpdateAnimationFrame();
+                        RenderSpriteAnimation(Jump_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale);
+                        hero.y -= verticalVelocity; // Учитываем гравитацию
+                        verticalVelocity += gravity; // Обновляем вертикальную скорость
+                        hero.x += hero.dx; // Обновляем координату X
+
+                        if (hero.x < 0) hero.x = 0;
+                        if (hero.x > rct.right - renderedSpriteWidth) hero.x = rct.right - renderedSpriteWidth;
+
+                        if (hero.y >= groundLevel)
+                        {
+                            hero.y = groundLevel;
+                            isAirborne = false;
+                            verticalVelocity = 0;
+                        }
+                        glPopMatrix();
+                    }
+                else if (isMoving)
+                {
+                    glPushMatrix();
+                    UpdateAnimationFrame();
+                    hero.x += hero.dx;
+                    hero.y += hero.dy;
+                    if (hero.x < 0) hero.x = 0;
+                    if (hero.x > rct.right - renderedSpriteWidth) hero.x = rct.right - renderedSpriteWidth;
+                    RenderSpriteAnimation(Walk_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale);
+                    glPopMatrix();
+                }
+
             }
-            else
-            {
-                RenderPicture(texture);
-            }
+            glDisable(GL_BLEND);
             SwapBuffers(hDC);
+            Sleep (80);
         }
+
     }
+
 
     /* shutdown OpenGL */
     DisableOpenGL(hwnd, hDC, hRC);
@@ -192,46 +270,66 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         case WM_CLOSE:
             PostQuitMessage(0);
-        break;
-        case WM_MOUSEMOVE:
-            for (int i = 0; i < buttonCounter; i++){
-                if (IsCursorOnButton(LOWORD(lParam), HIWORD(lParam), buttons[i])){
-                    buttons[i].isActive = TRUE;
-                    ButtonShow(buttons[i]);
-                }
-                else{
-                    buttons[i].isActive = FALSE;
-                }
-            }
-        break;
-        case WM_LBUTTONDOWN:
-            for (int i = 0; i < buttonCounter; i++){
-                if (IsCursorOnButton(LOWORD(lParam), HIWORD(lParam), buttons[i])){
-                    ButtonEventHandler(buttons[i]);
-                }
-            }
-        break;
+            break;
 
-        case WM_SIZE:
-            width = LOWORD(lParam);
-            height = HIWORD(lParam);
-            glViewport(0,0, LOWORD(lParam), HIWORD(lParam));
-            glLoadIdentity();
-            float k = LOWORD(lParam) / (float)HIWORD(lParam);
-            glOrtho(-k,k, -1,1, -1,1);
-        case WM_DESTROY:
-            return 0;
+        case WM_MOUSEMOVE:
+            Menu_MouseMove(LOWORD(lParam), HIWORD(lParam));
+            break;
+
+        case WM_LBUTTONDOWN:
+            {
+                int buttonId = Menu_MouseDown();
+                if (buttonId == 0)
+                {
+                    button1 = 1;
+                    button2 = 0;
+                    printf("Button Sprite_1 pressed. State: %d\n", button1);
+                }
+                else if (buttonId == 1)
+                {
+                    button1 = 0;
+                    button2 = 1;
+                    printf("Button Sprite_2 pressed. State: %d\n", button2);
+                }
+                else if (buttonId == 2)
+                    PostQuitMessage(0);
+            }
+            break;
+
+        case WM_LBUTTONUP:
+            Menu_MouseUp();
+            break;
 
         case WM_KEYDOWN:
-        {
-            switch (wParam)
-            {
-                case VK_ESCAPE:
-                    PostQuitMessage(0);
-                break;
+            switch(wParam) {
+                case VK_LEFT:
+                    hero.dx = -15.0f;
+                    isMoving = 1;
+                    break;
+                case VK_RIGHT:
+                    hero.dx = 15.0f;
+                    isMoving = 1;
+                    break;
+                case VK_UP:
+                case VK_SPACE:
+                    if (!isAirborne)
+                    {
+                        isAirborne = true;
+                        verticalVelocity = jumpSpeed;
+                    }
+                    break;
             }
-        }
-        break;
+            break;
+
+        case WM_KEYUP:
+            switch(wParam) {
+                case VK_LEFT:
+                case VK_RIGHT:
+                    hero.dx = 0.0f;
+                    isMoving = 0;
+                    break;
+            }
+            break;
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -277,4 +375,3 @@ void DisableOpenGL (HWND hwnd, HDC hDC, HGLRC hRC)
     wglDeleteContext(hRC);
     ReleaseDC(hwnd, hDC);
 }
-
