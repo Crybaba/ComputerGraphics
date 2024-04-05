@@ -43,10 +43,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="menu.h" />
-		<Unit filename="picture_loader.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="picture_loader.h" />
 		<Unit filename="stb-master/stb_easy_font.h" />
 		<Unit filename="stb-master/stb_image.h" />
 		<Extensions>
