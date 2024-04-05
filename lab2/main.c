@@ -1,14 +1,13 @@
 #include <windows.h>
 #include <gl/gl.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
 #include "stb-master/stb_easy_font.h"
-#define MESSAGE 0
-#define RENDER 1
-#define TERMINATE 2
+#include "menu.h"
 
-#define WINDOW_HEIGHT 500
-#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 800
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
@@ -16,85 +15,37 @@ void DisableOpenGL(HWND, HDC, HGLRC);
 
 int width, height;
 unsigned int texture;
-BOOL IsImageOnScreen = FALSE;
+int button1 = 0;
+int button2 = 0;
+GLuint texture;
 
-typedef struct {
-    int id;
-    char name[20];
-    float vert[8];
-    float color[3];
-    BOOL isActive;
-} Button;
-
-Button buttons[] = {
-    {MESSAGE, "message",{25,40, 225,40, 225,70, 25,70}, {1.0f,1.0f,1.0f}, FALSE},
-    {RENDER, "render",{25,80, 225,80, 225,110, 25,110}, {0.0f,0.0f,1.0f}, FALSE},
-    {TERMINATE, "terminate",{25,120, 225,120, 225,150, 25,150}, {1.0f,0.0f,0.0f}, FALSE},
-};
-
-int buttonCounter = sizeof(buttons) / sizeof(buttons[0]);
-
-BOOL IsCursorOnButton(int x, int y, Button button)
+GLuint LoadTexture(const char *filename)
 {
-    return (x > button.vert[0]) && (x < button.vert[4]) && (y > button.vert[1]) && (y < button.vert[5]);
-}
-
-void ButtonShow(Button button)
-{
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glColor3f(button.color[0], button.color[1], button.color[2]);
-    if (button.isActive) glColor3f(button.color[0]/2, button.color[1]/2, button.color[2]/2);
-    glVertexPointer(2, GL_FLOAT, 0, button.vert);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-     glPushMatrix();
-    static char buffer[99999]; // ~500 chars
-    int num_quads;
-
-    num_quads = stb_easy_font_print(button.vert[0]/2+10,
-                                    button.vert[1]/2+2.5,
-                                    button.name,
-                                    NULL,
-                                    buffer,
-                                    sizeof(buffer));
-    glScalef(2.0f,2.0f,1);
-    stb_easy_font_spacing(1);
-
-    glColor3f(0.0f,0.0f,0.0f);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(2, GL_FLOAT, 16, buffer);
-    glDrawArrays(GL_QUADS, 0, num_quads*4);
-    glPopMatrix();
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-}
-
-void ShowMenu()
-{
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0,width, height,0, -1,1);
-    for(int i = 0; i < buttonCounter; i++){
-        ButtonShow(buttons[i]);
+    int width, height, cnt;
+    unsigned char *image = stbi_load(filename, &width, &height, &cnt, 0);
+    if (image == NULL) {
+        printf("Error in loading the image: %s\n", stbi_failure_reason());
+        exit(1);
     }
-    glPopMatrix();
+    printf("Loaded image '%s' with width: %d, height: %d, channels: %d\n", filename, width, height, cnt);
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, cnt == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(image);
+    return textureID;
 }
 
-void ButtonEventHandler(Button button)
+void Init()
 {
-    switch (button.id)
-    {
-        case MESSAGE:
-            printf("Hello World!\n");
-        break;
-        case RENDER:
-            IsImageOnScreen = TRUE;
-        break;
-        case TERMINATE:
-            PostQuitMessage(0);
-        break;
-    }
+    Menu_AddButton("LoadSprite",10,10,100,30,1.5);
+    Menu_AddButton("DeleteSprite",10,50,100,30,1.5);
+    Menu_AddButton("Exit",10,90,100,30,2);
+
+    texture = LoadTexture("Background.jpg");
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -102,6 +53,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
+
+
     WNDCLASSEX wcex;
     HWND hwnd;
     HDC hDC;
@@ -146,12 +99,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
 
-    LoadPicture("Background.jpg", &texture);
+    RECT rct; //создание переменной с координатами прямоуголника
+
+    glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            GetClientRect(hwnd, &rct);
+            glOrtho(0, rct.right, rct.bottom, 0, 1, -1);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+
+    Init();
 
     /* program main loop */
     while (!bQuit)
     {
-        /* check for messages */
+          /* check for messages */
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             /* handle or dispatch messages */
@@ -170,14 +133,38 @@ int WINAPI WinMain(HINSTANCE hInstance,
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (!IsImageOnScreen)
+            glPushMatrix();
+
+            Menu_ShowMenu();
+
+            float centerX = rct.right / 2.0f;
+            float posY = 50.0f;
+            float spriteWidth = 500.0f; // ширина текстуры
+            float spriteHeight = 500.0f; // высота текстуры
+
+            if (button1)
             {
-                ShowMenu();
+                float sprite1PosX = centerX - (spriteWidth / 2);
+                float sprite1PosY = posY;
+
+
+
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glColor3f(1,1,1);
+                glPushMatrix();
+                glBegin(GL_QUADS);
+                glTexCoord2f(0.0f, 0.0f); glVertex2f(sprite1PosX, sprite1PosY);
+                glTexCoord2f(1.0f, 0.0f); glVertex2f(sprite1PosX + spriteWidth, sprite1PosY);
+                glTexCoord2f(1.0f, 1.0f); glVertex2f(sprite1PosX + spriteWidth, sprite1PosY + spriteHeight);
+                glTexCoord2f(0.0f, 1.0f); glVertex2f(sprite1PosX, sprite1PosY + spriteHeight);
+                glEnd();
+                glDisable(GL_TEXTURE_2D);
+                glPopMatrix();
             }
-            else
-            {
-                RenderPicture(texture);
-            }
+
+            glPopMatrix();
+
             SwapBuffers(hDC);
         }
     }
@@ -198,32 +185,37 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_CLOSE:
             PostQuitMessage(0);
         break;
+
+
         case WM_MOUSEMOVE:
-            for (int i = 0; i < buttonCounter; i++){
-                if (IsCursorOnButton(LOWORD(lParam), HIWORD(lParam), buttons[i])){
-                    buttons[i].isActive = TRUE;
-                    ButtonShow(buttons[i]);
-                }
-                else{
-                    buttons[i].isActive = FALSE;
-                }
-            }
-        break;
-        case WM_LBUTTONDOWN:
-            for (int i = 0; i < buttonCounter; i++){
-                if (IsCursorOnButton(LOWORD(lParam), HIWORD(lParam), buttons[i])){
-                    ButtonEventHandler(buttons[i]);
-                }
-            }
+            Menu_MouseMove(LOWORD(lParam), HIWORD(lParam));
         break;
 
-        case WM_SIZE:
-            width = LOWORD(lParam);
-            height = HIWORD(lParam);
-            glViewport(0,0, LOWORD(lParam), HIWORD(lParam));
-            glLoadIdentity();
-            float k = LOWORD(lParam) / (float)HIWORD(lParam);
-            glOrtho(-k,k, -1,1, -1,1);
+        case WM_LBUTTONDOWN:
+{
+                int buttonId = Menu_MouseDown();
+                if (buttonId == 0)
+                {
+                    button1 = 1;
+                    button2 = 0;
+                    printf("Button Sprite_1 pressed. State: %d\n", button1);
+                }
+                else if (buttonId == 1)
+                {
+                    button1 = 0;
+                    button2 = 1;
+                    printf("Button Sprite_2 pressed. State: %d\n", button2);
+                }
+                else if (buttonId == 2)
+                    PostQuitMessage(0);
+            }
+            break;
+
+        case WM_LBUTTONUP:
+            Menu_MouseUp();
+        break;
+
+
         case WM_DESTROY:
             return 0;
 
