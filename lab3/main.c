@@ -5,9 +5,7 @@
 #include "stb-master/stb_image.h"
 #include "stb-master/stb_easy_font.h"
 #include "menu.h"
-#define bool int
-#define true 1
-#define false 0
+
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
@@ -23,9 +21,9 @@ int isMoving = 0;
 float jumpSpeed = 50.0f; // Начальная скорость прыжка
 float gravity = -5.0f; // Ускорение, действующее на персонажа при падении
 float verticalVelocity = 0.0f; // Вертикальная скорость персонажа
-bool isJumping = false; // Находится ли персонаж в прыжке
+BOOL isJumping = false; // Находится ли персонаж в прыжке
 float groundLevel = 0.0f; // Уровень "земли", ниже которого персонаж не может опуститься
-bool isAirborne = false;  // Переменная для проверки, находится ли персонаж в воздухе
+BOOL isAirborne = false;  // Переменная для проверки, находится ли персонаж в воздухе
 
 typedef struct {
     float x, y;    // Позиция
