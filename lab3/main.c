@@ -21,9 +21,9 @@ int isMoving = 0;
 float jumpSpeed = 50.0f; // Начальная скорость прыжка
 float gravity = -5.0f; // Ускорение, действующее на персонажа при падении
 float verticalVelocity = 0.0f; // Вертикальная скорость персонажа
-BOOL isJumping = false; // Находится ли персонаж в прыжке
+BOOL isJumping = FALSE; // Находится ли персонаж в прыжке
 float groundLevel = 0.0f; // Уровень "земли", ниже которого персонаж не может опуститься
-BOOL isAirborne = false;  // Переменная для проверки, находится ли персонаж в воздухе
+BOOL isAirborne = FALSE;  // Переменная для проверки, находится ли персонаж в воздухе
 
 typedef struct {
     float x, y;    // Позиция
@@ -227,7 +227,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
                         if (hero.y >= groundLevel)
                         {
                             hero.y = groundLevel;
-                            isAirborne = false;
+                            isAirborne = FALSE;
                             verticalVelocity = 0;
                         }
                         glPopMatrix();
@@ -312,7 +312,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 case VK_SPACE:
                     if (!isAirborne)
                     {
-                        isAirborne = true;
+                        isAirborne = TRUE;
                         verticalVelocity = jumpSpeed;
                     }
                     break;
