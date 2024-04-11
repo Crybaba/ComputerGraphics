@@ -1,18 +1,18 @@
 #include <windows.h>
 #include <gl/gl.h>
+#include <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
 #include "stb-master/stb_easy_font.h"
 #include "menu.h"
 
-#define H 27 // Высота карты
-#define W 48 // Ширина карты
-
-#define WINDOW_HEIGHT 1080
-#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1000
+#define WINDOW_WIDTH 1600
 
 #include <float.h>
+
+
 
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
@@ -24,54 +24,48 @@ int button1 = 0;
 int button2 = 0;
 
 GLuint Idle_sprite, Walk_sprite, Jump_sprite, background, brickTile, groundTile;
+
+const float blockSize = 40.0f; // размер одного тайла
+#define H 25 //Высота экрана в тайлах 1080/40
+#define W 40 //Высота экрана в тайлах 1920/40
+
 int currentFrame = 0;          // Текущий кадр анимации
 const int totalFrames = 7;     // Всего кадров в спрайт-листе
 float frameWidth = 1.0f / 7.0f;  // Ширина одного кадра в текстурных координатах
 int isMoving = 0;
-float jumpSpeed = 40.0f; // Начальная скорость прыжка
-float gravity = -5.0f; // Ускорение, действующее на персонажа при падении
-float verticalVelocity = 0.0f; // Вертикальная скорость персонажа
-float maxYVelocity = 20.0f;
-BOOL isJumping = FALSE; // Находится ли персонаж в прыжке
-float groundLevel = 0.0f; // Уровень "земли", ниже которого персонаж не может опуститься
+float jumpSpeed = 30.0f; // Начальная скорость прыжка
+float gravity = -2.0f; // Ускорение, действующее на персонажа при падении
 BOOL isAirborne = TRUE;  // Переменная для проверки, находится ли персонаж в воздухе
-int jumpFrame = 0;
-int jumpAnimationPlaying = 0;
-const int jumpFramesCount = 80;
-float jumpAnimationDuration = 0.0f;
-float totalJumpDuration;
-const float blockSize = 40.0f;
+
 
 
 char TileMap[H][W] = {
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGG                  B",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B                         GGGGGGGGGGGGGGGGGGGGGB",
-    "B                                              B",
-    "B                                              B",
-    "B                                              B",
-    "B            GGGGGGGGGGGGG                     B",
-    "BGGGG                                          B",
-    "BGGGG                                          B",
-    "BGGGGGGG                                       B",
-    "BGGGGGGG                                       B",
-    "BGGGGGGGGGG                                    B",
-    "BGGGGGGGGGG                                    B",
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
-    "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
-};
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "B                                      B",
+    "B                                      B",
+    "B                                      B",
+    "B                                      B",
+    "B                                      B",
+    "B                     BBBBBBBBBBBBBBBBBB",
+    "B                                      B",
+    "B                                      B",
+    "B                                      B",
+    "BBBBBBBBBBBBBB                         B",
+    "B                                      B",
+    "B                                      B",
+    "B                                      B",
+    "B                 BBBBBBBBBBBBBBBBBBBBBB",
+    "B                                      B",
+    "BBBB                                   B",
+    "BBBB                                   B",
+    "BBBBBBBB                     BBBBBBBBBBB",
+    "BBBBBBBB                               B",
+    "BBBBBBBBBBBB                           B",
+    "BBBBBBBBBBBB                           B",
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+  };
 
 typedef struct {
     float x, y;          // Позиция
@@ -79,13 +73,12 @@ typedef struct {
     BOOL isAirborne;     // Находится ли в воздухе
     BOOL isMoving;       // Двигается ли
     float width, height; // Размеры героя
-    BOOL jumpPeakReached;// Достигнут ли пик прыжка
-    BOOL faceRight; //смотрит ли влево
+    BOOL faceRight;      //смотрит ли влево
+    float scale;
+    float currentJumpSpeed;
 } Hero;
 
-Hero hero = { .x = 0.0f, .y = 0.0f, .dx = 0.0f, .dy = 0.0f, .isAirborne = TRUE, .isMoving = FALSE, .width = 120.0f, .height = 80.0f };
-
-//КОЛИЗИЯ
+Hero hero = { .x = 0.0f, .y = 0.0f, .dx = 0.0f, .dy = 0.0f, .isAirborne = TRUE, .isMoving = FALSE, .width = 120.0f, .height = 80.0f, .scale = 1.0f, .currentJumpSpeed = 0.0f};
 
 void DrawMap() {
     for (int i = 0; i < H; ++i) {
@@ -97,9 +90,6 @@ void DrawMap() {
             switch(tile) {
                 case 'B': // Кирпич
                     textureID =  brickTile; // Чередование текстур
-                    break;
-                case 'G': // Земля
-                    textureID =  groundTile; // Чередование текстур
                     break;
                 default:
                     continue; // Пропускаем пустое пространство или неизвестные символы
@@ -116,6 +106,109 @@ void DrawMap() {
                 glTexCoord2f(0.0f, 1.0f); glVertex2f(j * blockSize, i * blockSize + blockSize);
             glEnd();
             glDisable(GL_TEXTURE_2D);
+        }
+    }
+}
+
+
+BOOL CollisionHappened(float potentialNewX, float potentialNewY, Hero *hero) {
+    for (int i = (int)(potentialNewY / blockSize); i < round((potentialNewY + hero->height * hero->scale) / blockSize); i++) {
+        for (int j = (int)(potentialNewX / blockSize); j < round((potentialNewX + hero->width * hero->scale) / blockSize); j++) {
+            char tile = TileMap[i][j];
+            if (tile == 'B') {
+                return TRUE; // Обнаружено столкновение
+            }
+        }
+    }
+    return FALSE; // Столкновение не обнаружено
+}
+
+void UpdateHeroPositionAndCollisions(Hero *hero) {
+    if (hero->y < 0) {
+        hero->y = 0;
+        hero->dy = 0;
+    }
+    if (hero->y > 1000.0f - hero->height*hero->scale) {
+        hero->y = 1000.0f;
+        hero->dy = 0;
+    }
+    if (hero->x < 0) {
+        hero->x = 0;
+        hero->dx = 0;
+    }
+    if (hero->x > 1600 - hero->width) {
+        hero->x = 1600;
+        hero->dx = 0;
+    }
+
+    float potentialNewX = hero->x + hero->dx;
+    float potentialNewY = hero->y + hero->dy;
+
+     //проверка коллизии по Y
+       if (hero->dy != 0) {
+        if (CollisionHappened(hero->x, potentialNewY, hero)) {
+            hero->dy = 0;
+            hero->isAirborne = FALSE;
+            }
+        }
+
+        //проверка коллизии по X
+    if (hero->dx != 0) {
+        if(CollisionHappened(potentialNewX, hero->y, hero))
+        {
+            hero->dx = 0;
+        }
+        hero->x += hero->dx;
+    }
+
+    if(hero->isAirborne)
+    {
+        if (hero->currentJumpSpeed > 0 )
+        {
+            hero->dy = hero->currentJumpSpeed;
+            hero->y -= hero->dy;
+            hero->currentJumpSpeed += gravity;
+        }
+        else
+        {
+            hero->dy -= gravity;
+            hero->y += hero->dy;
+        }
+    }
+
+     // Новая переменная для определения, есть ли блоки вблизи под персонажем
+    BOOL hasBlocksBelow = FALSE;
+
+    // Проверяем блоки в нижнем диапазоне под персонажем
+    int bottomTileY = round((hero->y + hero->height*hero->scale) / blockSize); // Нижний тайл под персонажем
+    int leftTileX = round(hero->x / blockSize); // Левый тайл под персонажем
+    int rightTileX = round((hero->x + hero->width * hero->scale) / blockSize); // Правый тайл под персонажем
+
+    for (int j = leftTileX; j <= rightTileX; j++) {
+        if (TileMap[bottomTileY][j] == 'B') {
+            hasBlocksBelow = TRUE;
+            break;
+        }
+    }
+
+    // Если блоков нет в нижнем диапазоне, персонаж начинает падать
+    if (!hasBlocksBelow) {
+        hero->isAirborne = TRUE;
+    }
+
+        // Проверка коллизии с потолком
+    if (hero->dy > 0) { // Проверяем только при подъеме персонажа
+        int topTileY = round(hero->y / blockSize); // Верхний тайл над персонажем
+        int leftTileX = round(hero->x / blockSize); // Левый тайл над персонажем
+        int rightTileX = round((hero->x + hero->width * hero->scale) / blockSize); // Правый тайл над персонажем
+
+        for (int j = leftTileX; j <= rightTileX; j++) {
+            if (TileMap[topTileY][j] == 'B') {
+                hero->dy = 0;
+                hero->y = (topTileY + 1) * blockSize;
+                hero->currentJumpSpeed = 0; // Перемещаем персонажа на самый верхний блок
+                break;
+            }
         }
     }
 }
@@ -204,125 +297,6 @@ void RenderSpriteAnimation(GLuint texture, float posX, float posY, float width, 
     glDisable(GL_TEXTURE_2D);
 }
 
-BOOL CheckCollisionWithMap(float newX, float newY, Hero *hero, BOOL* isWallHit) {
-    *isWallHit = FALSE; // Сбрасываем флаг столкновения со стеной
-    // Проверка на столкновение с тайлами карты
-    for (int y = (int)(newY / blockSize); y < (int)((newY + hero->height) / blockSize); y++) {
-        for (int x = (int)(newX / blockSize); x < (int)((newX + hero->width) / blockSize); x++) {
-            char tile = TileMap[y][x];
-            if (tile == 'B' || tile == 'G') {
-                *isWallHit = TRUE; // Устанавливаем флаг столкновения со стеной, если касаемся тайла 'X'
-                return TRUE; // Обнаружено столкновение
-            }
-        }
-    }
-    return FALSE; // Столкновений не обнаружено
-}
-
-BOOL isAtSolidTile(float x, float y) {
-    // Преобразуем координаты в индексы массива TileMap
-    int tileX = (int)(x / blockSize);
-    int tileY = (int)(y / blockSize);
-
-    // Проверяем, не выходят ли индексы за пределы массива
-    if (tileX < 0 || tileX >= W || tileY < 0 || tileY >= H) {
-        return FALSE; // Возвращаем false, если координаты вне диапазона карты
-    }
-
-    // Получаем символ тайла по индексам
-    char tile = TileMap[tileY][tileX];
-
-    // Возвращаем true, если тайл является непроходимым
-    return (tile == 'B' || tile == 'G');
-}
-
-void UpdateGroundLevelForHero(Hero* hero) {
-    float nearestGround = FLT_MAX;
-    BOOL groundFound = FALSE;
-
-    // Начинаем проверку с позиции героя по X и проверяем только тайлы прямо под ним
-    int tileXStart = (int)(hero->x / blockSize);
-    int tileXEnd = (int)((hero->x + hero->width) / blockSize);
-
-    // Ищем ближайший непроходимый тайл под героем
-    for (int x = tileXStart+1; x <= tileXEnd-1; x++) {
-        for (int y = (int)(hero->y / blockSize)+1; y < (hero->y + hero->height / blockSize)-5; y++) {
-            if (isAtSolidTile(x * blockSize, y * blockSize)) {
-                float groundY = y * blockSize - hero->height;
-                if (groundY <= nearestGround) {
-                    nearestGround = groundY;
-                    groundFound = TRUE;
-                }
-                break; // Переходим к следующему столбцу, как только найдем землю
-            }
-        }
-    }
-
-    if (groundFound) {
-        groundLevel = nearestGround;
-    } else {
-        // Если под героем нет земли, мы можем установить groundLevel
-        // в значение, которое обозначает "падение" или вернуть его на дефолтный уровень
-        groundLevel = FLT_MAX; // Означает отсутствие земли под героем
-    }
-}
-
-// Функция обновления позиции персонажа и коллизий
-void UpdateHeroPositionAndCollisions(Hero *hero) {
-
-
-    // Предполагаемая новая позиция героя
-    float potentialNewX = hero->x + hero->dx;
-    float potentialNewY = hero->y + hero->dy;
-    BOOL isWallHit = FALSE; // Флаг столкновения со стеной
-
-    // Проверка на столкновение и обновление позиции по X
-    if (!CheckCollisionWithMap(potentialNewX, hero->y, hero, &isWallHit)) {
-        hero->x = potentialNewX;
-    } else {
-        if (isWallHit) { // Если столкновение со стеной
-            hero->dx = 0; // Останавливаем движение
-            hero->dy = 0;
-        }
-    }
-
-
-    // Проверка на столкновение и обновление позиции по Y
-    if (!CheckCollisionWithMap(hero->x, potentialNewY, hero, &isWallHit)) {
-        hero->y = potentialNewY;
-    } else {
-        if (isWallHit) {
-            if (hero->dy > 0) { // Если персонаж двигался вверх
-                hero->dy = 0; // Останавливаем вертикальное движение
-            } else {
-                hero->y = (int)hero->y;
-                hero->dy = 0; // Обнуляем вертикальную скорость после столкновения с землей
-            }
-        }
-    }
-
-    // Применяем гравитацию
-    hero->dy -= gravity;
-
-    // Ограничение вертикальной скорости
-    if (hero->dy > maxYVelocity) {
-        hero->dy = maxYVelocity;
-    } else if (hero->dy < -maxYVelocity) {
-        hero->dy = -maxYVelocity;
-    }
-
-    // Проверка нахождения героя на земле
-    if (hero->y >= groundLevel) {
-        hero->y = groundLevel; // Коррекция позиции на уровень земли
-        hero->isAirborne = FALSE;
-        hero->dy = 0; // Прекращаем вертикальное движение
-    } else {
-        hero->isAirborne = TRUE;
-    }
-    // Обновляем уровень земли для героя
-    UpdateGroundLevelForHero(hero);
-}
-
 void Init(HWND hwnd)
 {
     Menu_AddButton("Action",10,10,100,30,1.5);
@@ -333,20 +307,15 @@ void Init(HWND hwnd)
     Walk_sprite = LoadTexture("walk.png");
     Jump_sprite = LoadTexture("jump.png");
     background = LoadTexture("Background.jpg");
-    groundTile = LoadTexture("ground.png");
     brickTile = LoadTexture("brick.png");
-
-    hero.dy = 0.0f;
 
     RECT rct;
     GetClientRect(hwnd, &rct);
 
-    groundLevel = rct.bottom - 300;
-
     // Инициализация позиции героя
-    hero.x = 480.0f;  // Начальная позиция по X
-    hero.y = groundLevel-0.5;  // Начальная позиция по Y
-    hero.isAirborne = FALSE;
+    hero.x = 500;  // Начальная позиция по X
+    hero.y = 600;  // Начальная позиция по Y
+    hero.isAirborne = TRUE;
     hero.faceRight = TRUE;
 }
 
@@ -355,7 +324,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
-    glViewport(0, 0, 1000, 1000);
     WNDCLASSEX wcex;
     HWND hwnd;
     HDC hDC;
@@ -403,8 +371,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
+            glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 1, -1);
             GetClientRect(hwnd, &rct);
-            glOrtho(0, rct.right, rct.bottom, 0, 1, -1);
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
 
@@ -439,11 +407,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
             DrawBackground(background);
             Menu_ShowMenu();
 
-            float centerX = rct.right / 2.0f;
-            float posY = 150.0f;
-            float spriteWidth = 770.0f; // ширина текстуры
-            float spriteHeight = 80.0f; // высота текстуры
-
             if (button1)
             {
                 DrawMap();
@@ -451,49 +414,29 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                float spriteAspectRatio = hero.width / hero.height;
-                float renderedSpriteWidth = spriteHeight * spriteAspectRatio;
                 UpdateHeroPositionAndCollisions(&hero);
-                float scale = 1.0f; // Уменьшаем масштаб спрайта
 
-                if (!isAirborne && !isMoving)
+                if (!hero.isAirborne && !hero.isMoving)
                 {
                     glPushMatrix();
                     UpdateGeneralAnimationFrame();
-                    RenderSpriteAnimation(Idle_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale, currentFrame, frameWidth);
+                    RenderSpriteAnimation(Idle_sprite, hero.x, hero.y, hero.width, hero.height, hero.scale, currentFrame, frameWidth);
                     glPopMatrix();
                 }
 
-                else if (isAirborne)
+                else if (hero.isAirborne)
                     {
                         glPushMatrix();
-
                         UpdateGeneralAnimationFrame();
-                        RenderSpriteAnimation(Jump_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale, currentFrame, frameWidth);
-                        hero.y -= verticalVelocity; // Учитываем гравитацию
-                        verticalVelocity += gravity; // Обновляем вертикальную скорость
-                        hero.x += hero.dx; // Обновляем координату X
-
-                        hero.y -= verticalVelocity; // Вычитаем, потому что движемся вверх
-                        verticalVelocity += gravity; // Добавляем гравитацию
-
-                    if (hero.y >= groundLevel) {
-                        hero.y = groundLevel;
-                        isAirborne = FALSE;
-                        verticalVelocity = 0;
-                        }
-                    glPopMatrix();
+                        RenderSpriteAnimation(Jump_sprite, hero.x, hero.y, hero.width, hero.height, hero.scale, currentFrame, frameWidth);
+                        glPopMatrix();
                 }
-                //Collision(&hero);
-                else if (isMoving)
+
+                else if (hero.isMoving)
                 {
                     glPushMatrix();
                     UpdateGeneralAnimationFrame();
-                    hero.x += hero.dx;
-                    hero.y += hero.dy;
-                    if (hero.x < 0) hero.x = 0;
-                    if (hero.x > rct.right - renderedSpriteWidth) hero.x = rct.right - renderedSpriteWidth;
-                    RenderSpriteAnimation(Walk_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale, currentFrame, frameWidth);
+                    RenderSpriteAnimation(Walk_sprite, hero.x, hero.y, hero.width, hero.height, hero.scale, currentFrame, frameWidth);
                     glPopMatrix();
                 }
 
@@ -555,20 +498,20 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             switch(wParam) {
                 case VK_LEFT:
                     hero.dx = -15.0f;
-                    isMoving = TRUE;
+                    hero.isMoving = TRUE;
                     hero.faceRight = FALSE; // Герой смотрит влево
                     break;
                 case VK_RIGHT:
                     hero.dx = 15.0f;
-                    isMoving = TRUE;
+                    hero.isMoving = TRUE;
                     hero.faceRight = TRUE;
                     break;
                 case VK_UP:
                 case VK_SPACE:
-                    if (!isAirborne)
+                    if (!hero.isAirborne)
                     {
-                        isAirborne = TRUE;
-                        verticalVelocity = jumpSpeed;
+                        hero.isAirborne = TRUE;
+                        hero.currentJumpSpeed = jumpSpeed;
                     }
                     break;
             }
@@ -579,7 +522,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 case VK_LEFT:
                 case VK_RIGHT:
                     hero.dx = 0.0f;
-                    isMoving = 0;
+                    hero.isMoving = FALSE;
                     break;
             }
             break;
