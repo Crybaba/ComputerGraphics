@@ -246,7 +246,7 @@ void UpdateGroundLevelForHero(Hero* hero) {
 
     // Ищем ближайший непроходимый тайл под героем
     for (int x = tileXStart+1; x <= tileXEnd-1; x++) {
-        for (int y = (int)(hero->y / blockSize); y < H; y++) {
+        for (int y = (int)(hero->y / blockSize)+1; y < (hero->y + hero->height / blockSize)-5; y++) {
             if (isAtSolidTile(x * blockSize, y * blockSize)) {
                 float groundY = y * blockSize - hero->height;
                 if (groundY <= nearestGround) {
@@ -269,8 +269,7 @@ void UpdateGroundLevelForHero(Hero* hero) {
 
 // Функция обновления позиции персонажа и коллизий
 void UpdateHeroPositionAndCollisions(Hero *hero) {
-    // Обновляем уровень земли для героя
-    UpdateGroundLevelForHero(hero);
+
 
     // Предполагаемая новая позиция героя
     float potentialNewX = hero->x + hero->dx;
@@ -296,7 +295,7 @@ void UpdateHeroPositionAndCollisions(Hero *hero) {
             if (hero->dy > 0) { // Если персонаж двигался вверх
                 hero->dy = 0; // Останавливаем вертикальное движение
             } else {
-                hero->y = (int)(hero->y / blockSize) * blockSize; // Корректируем позицию на уровень тайла
+                hero->y = (int)hero->y;
                 hero->dy = 0; // Обнуляем вертикальную скорость после столкновения с землей
             }
         }
@@ -320,6 +319,8 @@ void UpdateHeroPositionAndCollisions(Hero *hero) {
     } else {
         hero->isAirborne = TRUE;
     }
+    // Обновляем уровень земли для героя
+    UpdateGroundLevelForHero(hero);
 }
 
 void Init(HWND hwnd)
