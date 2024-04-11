@@ -31,7 +31,7 @@ int isMoving = 0;
 float jumpSpeed = 40.0f; // Начальная скорость прыжка
 float gravity = -5.0f; // Ускорение, действующее на персонажа при падении
 float verticalVelocity = 0.0f; // Вертикальная скорость персонажа
-float maxYVelocity = 40.0f;
+float maxYVelocity = 20.0f;
 BOOL isJumping = FALSE; // Находится ли персонаж в прыжке
 float groundLevel = 0.0f; // Уровень "земли", ниже которого персонаж не может опуститься
 BOOL isAirborne = TRUE;  // Переменная для проверки, находится ли персонаж в воздухе
@@ -51,9 +51,8 @@ char TileMap[H][W] = {
     "B                                              B",
     "B                                              B",
     "B                                              B",
+    "B                                              B",
     "BGGGGGGGGGGGGGGGGGGGGGGGGGGGG                  B",
-    "B                                              B",
-    "B                                              B",
     "B                                              B",
     "B                                              B",
     "B                                              B",
@@ -61,12 +60,13 @@ char TileMap[H][W] = {
     "B                                              B",
     "B                                              B",
     "B                                              B",
-    "B           GGGGGGGGGGGGGG                     B",
-    "B                                              B",
-    "B                                              B",
+    "B            GGGGGGGGGGGGG                     B",
     "BGGGG                                          B",
-    "BGGGGGG                                        B",
-    "BGGGGGGGG                                      B",
+    "BGGGG                                          B",
+    "BGGGGGGG                                       B",
+    "BGGGGGGG                                       B",
+    "BGGGGGGGGGG                                    B",
+    "BGGGGGGGGGG                                    B",
     "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
     "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
     "BGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGB",
@@ -80,9 +80,10 @@ typedef struct {
     BOOL isMoving;       // Двигается ли
     float width, height; // Размеры героя
     BOOL jumpPeakReached;// Достигнут ли пик прыжка
+    BOOL faceRight; //смотрит ли влево
 } Hero;
 
-Hero hero = { .x = 0.0f, .y = 0.0f, .dx = 0.0f, .dy = 0.0f, .isAirborne = TRUE, .isMoving = FALSE, .width = 80.0f, .height = 80.0f };
+Hero hero = { .x = 0.0f, .y = 0.0f, .dx = 0.0f, .dy = 0.0f, .isAirborne = TRUE, .isMoving = FALSE, .width = 120.0f, .height = 80.0f };
 
 //КОЛИЗИЯ
 
@@ -178,6 +179,13 @@ void RenderSpriteAnimation(GLuint texture, float posX, float posY, float width, 
     float texLeft = currentFrame * frameWidth;
     float texRight = texLeft + frameWidth;
 
+       // Отражаем спрайт по горизонтали, если герой смотрит влево
+    if (hero.faceRight) {
+        float temp = texRight;
+        texRight = texLeft;
+        texLeft = temp;
+    }
+
     // Рассчитываем размеры спрайта с учетом масштаба
     float scaledWidth = width * scale;
     float scaledHeight = height * scale;
@@ -202,11 +210,9 @@ BOOL CheckCollisionWithMap(float newX, float newY, Hero *hero, BOOL* isWallHit) 
     for (int y = (int)(newY / blockSize); y < (int)((newY + hero->height) / blockSize); y++) {
         for (int x = (int)(newX / blockSize); x < (int)((newX + hero->width) / blockSize); x++) {
             char tile = TileMap[y][x];
-            if (tile == 'B') {
+            if (tile == 'B' || tile == 'G') {
                 *isWallHit = TRUE; // Устанавливаем флаг столкновения со стеной, если касаемся тайла 'X'
                 return TRUE; // Обнаружено столкновение
-            } else if (tile == 'G' || tile == 'B'){
-                return TRUE; // Обнаружено столкновение с другими непроходимыми тайлами
             }
         }
     }
@@ -239,11 +245,11 @@ void UpdateGroundLevelForHero(Hero* hero) {
     int tileXEnd = (int)((hero->x + hero->width) / blockSize);
 
     // Ищем ближайший непроходимый тайл под героем
-    for (int x = tileXStart; x <= tileXEnd; x++) {
-        for (int y = (int)(hero->y / blockSize) + 1; y < H; y++) {
+    for (int x = tileXStart+1; x <= tileXEnd-1; x++) {
+        for (int y = (int)(hero->y / blockSize); y < H; y++) {
             if (isAtSolidTile(x * blockSize, y * blockSize)) {
                 float groundY = y * blockSize - hero->height;
-                if (groundY < nearestGround) {
+                if (groundY <= nearestGround) {
                     nearestGround = groundY;
                     groundFound = TRUE;
                 }
@@ -277,8 +283,10 @@ void UpdateHeroPositionAndCollisions(Hero *hero) {
     } else {
         if (isWallHit) { // Если столкновение со стеной
             hero->dx = 0; // Останавливаем движение
+            hero->dy = 0;
         }
     }
+
 
     // Проверка на столкновение и обновление позиции по Y
     if (!CheckCollisionWithMap(hero->x, potentialNewY, hero, &isWallHit)) {
@@ -333,10 +341,12 @@ void Init(HWND hwnd)
     GetClientRect(hwnd, &rct);
 
     groundLevel = rct.bottom - 300;
+
     // Инициализация позиции героя
-    hero.x = 400.0f;  // Начальная позиция по X
-    hero.y = groundLevel;  // Начальная позиция по Y
+    hero.x = 480.0f;  // Начальная позиция по X
+    hero.y = groundLevel-0.5;  // Начальная позиция по Y
     hero.isAirborne = FALSE;
+    hero.faceRight = TRUE;
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -436,10 +446,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
             if (button1)
             {
                 DrawMap();
+                Menu_ShowMenu();
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                float spriteAspectRatio = (float)110 / (float)80;
+                float spriteAspectRatio = hero.width / hero.height;
                 float renderedSpriteWidth = spriteHeight * spriteAspectRatio;
                 UpdateHeroPositionAndCollisions(&hero);
                 float scale = 1.0f; // Уменьшаем масштаб спрайта
@@ -484,7 +495,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
                     RenderSpriteAnimation(Walk_sprite, hero.x, hero.y, renderedSpriteWidth, spriteHeight, scale, currentFrame, frameWidth);
                     glPopMatrix();
                 }
-                Menu_ShowMenu();
 
             }
             glDisable(GL_BLEND);
@@ -544,11 +554,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             switch(wParam) {
                 case VK_LEFT:
                     hero.dx = -15.0f;
-                    isMoving = 1;
+                    isMoving = TRUE;
+                    hero.faceRight = FALSE; // Герой смотрит влево
                     break;
                 case VK_RIGHT:
                     hero.dx = 15.0f;
-                    isMoving = 1;
+                    isMoving = TRUE;
+                    hero.faceRight = TRUE;
                     break;
                 case VK_UP:
                 case VK_SPACE:
