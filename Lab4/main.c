@@ -199,8 +199,8 @@ void UpdateHeroPositionAndCollisions(Hero *hero) {
         // Проверка коллизии с потолком
     if (hero->dy > 0) { // Проверяем только при подъеме персонажа
         int topTileY = round(hero->y / blockSize); // Верхний тайл над персонажем
-        int leftTileX = round(hero->x / blockSize); // Левый тайл над персонажем
-        int rightTileX = round((hero->x + hero->width * hero->scale) / blockSize); // Правый тайл над персонажем
+        int leftTileX = (int)(hero->x / blockSize)+1; // Левый тайл над персонажем
+        int rightTileX = (int)((hero->x + hero->width * hero->scale) / blockSize)-1; // Правый тайл над персонажем
 
         for (int j = leftTileX; j <= rightTileX; j++) {
             if (TileMap[topTileY][j] == 'B') {
