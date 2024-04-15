@@ -1,0 +1,667 @@
+# depslib dependency file v1.0
+1678669148 source:c:\users\i\documents\codeblocks\lab2\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+
+1678667017 c:\users\i\documents\codeblocks\lab2\menu.hpp
+
+1678670442 source:c:\users\i\documents\codeblocks\lab2\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"../stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1674029754 c:\users\i\documents\codeblocks\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1678669695 source:c:\users\i\documents\codeblocks\lab2\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"../stb-master_lib/stb_image.h"
+
+1678670379 c:\users\i\documents\codeblocks\lab2\texture.hpp
+
+1674029754 c:\users\i\documents\codeblocks\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1678682562 source:c:\users\student\documents\workspace\computergraphics_inrtu-main\lab2\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+
+1678679565 c:\users\student\documents\workspace\computergraphics_inrtu-main\lab2\menu.hpp
+
+1678679566 c:\users\student\documents\workspace\computergraphics_inrtu-main\lab2\texture.hpp
+
+1678683754 source:c:\users\student\documents\workspace\computergraphics_inrtu-main\lab2\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"../stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1678679569 c:\users\student\documents\workspace\computergraphics_inrtu-main\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1678684029 source:c:\users\student\documents\workspace\computergraphics_inrtu-main\lab2\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"../stb-master_lib/stb_image.h"
+
+1678679570 c:\users\student\documents\workspace\computergraphics_inrtu-main\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1679889858 source:c:\users\i\documents\codeblocks\game\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1679889890 c:\users\i\documents\codeblocks\game\menu.hpp
+
+1674029754 c:\users\i\documents\codeblocks\game\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1681087317 c:\users\i\documents\codeblocks\game\texture.hpp
+
+1681087317 source:c:\users\i\documents\codeblocks\game\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+	"game.hpp"
+
+1679888762 source:c:\users\i\documents\codeblocks\game\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1674029754 c:\users\i\documents\codeblocks\game\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1681088469 source:c:\users\i\documents\codeblocks\game\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1681092436 c:\users\i\documents\codeblocks\game\game.hpp
+	<string>
+
+1681103168 source:e:\ИРНИТУ\Комп-Граф\game\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1681102130 e:\ИРНИТУ\Комп-Граф\game\game.hpp
+	<string>
+	<iostream>
+
+1681087318 e:\ИРНИТУ\Комп-Граф\game\texture.hpp
+
+1674029754 e:\ИРНИТУ\Комп-Граф\game\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1681103332 source:e:\ИРНИТУ\Комп-Граф\game\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+	"game.hpp"
+
+1679889890 e:\ИРНИТУ\Комп-Граф\game\menu.hpp
+
+1679889858 source:e:\ИРНИТУ\Комп-Граф\game\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1674029754 e:\ИРНИТУ\Комп-Граф\game\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1679888762 source:e:\ИРНИТУ\Комп-Граф\game\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1681908696 source:c:\users\profile\desktop\game2\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1681914559 c:\users\profile\desktop\game2\game.hpp
+	<string>
+	<iostream>
+
+1681913629 c:\users\profile\desktop\game2\texture.hpp
+
+1674029754 c:\users\profile\desktop\game2\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1681914455 source:c:\users\profile\desktop\game2\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+	"game.hpp"
+
+1681910386 c:\users\profile\desktop\game2\menu.hpp
+
+1681912988 source:c:\users\profile\desktop\game2\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1674029754 c:\users\profile\desktop\game2\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1681914160 source:c:\users\profile\desktop\game2\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1682164520 source:c:\users\profile\desktop\моя\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1682163362 c:\users\profile\desktop\моя\game.hpp
+	<string>
+	<iostream>
+
+1681913629 c:\users\profile\desktop\моя\texture.hpp
+
+1674029754 c:\users\profile\desktop\моя\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1682164235 source:c:\users\profile\desktop\моя\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1682164539 c:\users\profile\desktop\моя\menu.hpp
+
+1674029754 c:\users\profile\desktop\моя\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1682164630 source:c:\users\profile\desktop\моя\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1682164520 source:c:\users\profile\desktop\моя\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"menu.hpp"
+	"texture.hpp"
+	"game.hpp"
+
+1713028715 source:c:\users\user\downloads\telegram desktop\4\lab4\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713030599 c:\users\user\downloads\telegram desktop\4\lab4\game.hpp
+	<string>
+	<iostream>
+
+1713026960 c:\users\user\downloads\telegram desktop\4\lab4\texture.hpp
+
+1674029754 c:\users\user\downloads\telegram desktop\4\lab4\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1713030455 source:c:\users\user\downloads\telegram desktop\4\lab4\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"texture.hpp"
+	"game.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"stb-master_lib/stb_image.h"
+	"stb-master_lib/stb_easy_font.h"
+
+1682164539 c:\users\user\downloads\telegram desktop\4\lab4\menu.hpp
+
+1682164235 source:c:\users\user\downloads\telegram desktop\4\lab4\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1674029754 c:\users\user\downloads\telegram desktop\4\lab4\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1713026960 source:c:\users\user\downloads\telegram desktop\4\lab4\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713028853 source:c:\users\user\downloads\telegram desktop\4\lab4\menu.c
+
+1713028490 c:\users\user\downloads\telegram desktop\4\lab4\menu.h
+
+1713028715 source:c:\Рабочий стол\opengl\4_lb\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713030599 c:\Рабочий стол\opengl\4_lb\game.hpp
+	<string>
+	<iostream>
+
+1713026960 c:\Рабочий стол\opengl\4_lb\texture.hpp
+
+1674029754 c:\Рабочий стол\opengl\4_lb\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1713030455 source:c:\Рабочий стол\opengl\4_lb\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"texture.hpp"
+	"game.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"stb-master_lib/stb_image.h"
+	"stb-master_lib/stb_easy_font.h"
+
+1674029754 c:\Рабочий стол\opengl\4_lb\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1713026960 source:c:\Рабочий стол\opengl\4_lb\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713041813 source:c:\users\goode\desktop\opengl\4_lb\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713042318 c:\users\goode\desktop\opengl\4_lb\game.hpp
+	<string>
+	<iostream>
+
+1713033037 c:\users\goode\desktop\opengl\4_lb\texture.hpp
+
+1713033037 c:\users\goode\desktop\opengl\4_lb\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1713043978 source:c:\users\goode\desktop\opengl\4_lb\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"texture.hpp"
+	"game.hpp"
+	"menu.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"stb-master_lib/stb_image.h"
+	"stb-master_lib/stb_easy_font.h"
+
+1713033037 c:\users\goode\desktop\opengl\4_lb\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1713041636 source:c:\users\goode\desktop\opengl\4_lb\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1682164539 c:\users\goode\desktop\opengl\4_lb\menu.hpp
+
+1713043804 source:c:\users\goode\desktop\opengl\4_lb\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1713041813 source:c:\users\goode\desktop\lab4\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713042318 c:\users\goode\desktop\lab4\game.hpp
+	<string>
+	<iostream>
+
+1713033037 c:\users\goode\desktop\lab4\texture.hpp
+
+1713033037 c:\users\goode\desktop\lab4\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1713043804 source:c:\users\goode\desktop\lab4\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1682164539 c:\users\goode\desktop\lab4\menu.hpp
+
+1713033037 c:\users\goode\desktop\lab4\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1713044302 source:c:\users\goode\desktop\lab4\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"texture.hpp"
+	"game.hpp"
+	"menu.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"stb-master_lib/stb_image.h"
+	"stb-master_lib/stb_easy_font.h"
+
+1713041813 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\game.cpp
+	<gl/gl.h>
+	<math.h>
+	<string>
+	"game.hpp"
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
+1713042318 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\game.hpp
+	<string>
+	<iostream>
+
+1713033037 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\texture.hpp
+
+1713033037 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\stb-master_lib\stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<limits.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1713043804 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\menu.cpp
+	"menu.hpp"
+	<gl/gl.h>
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	"stb-master_lib/stb_easy_font.h"
+	"texture.hpp"
+
+1682164539 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\menu.hpp
+
+1713033037 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\stb-master_lib\stb_easy_font.h
+	<stdlib.h>
+	<math.h>
+
+1713114242 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab4\texture.cpp
+	<gl/gl.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<string>
+	<malloc.h>
+	"texture.hpp"
+	"stb-master_lib/stb_image.h"
+
