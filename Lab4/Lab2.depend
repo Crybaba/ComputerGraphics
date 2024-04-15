@@ -639,7 +639,7 @@
 	<intrin.h>
 	<arm_neon.h>
 
-1713043804 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\menu.cpp
+1713182865 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\menu.cpp
 	"menu.hpp"
 	<gl/gl.h>
 	<stdio.h>
@@ -648,7 +648,7 @@
 	"stb-master_lib/stb_easy_font.h"
 	"texture.hpp"
 
-1682164539 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\menu.hpp
+1713182865 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\menu.hpp
 
 1713033037 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\stb-master_lib\stb_easy_font.h
 	<stdlib.h>
@@ -664,4 +664,15 @@
 	<malloc.h>
 	"texture.hpp"
 	"stb-master_lib/stb_image.h"
+
+1713183079 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	"texture.hpp"
+	"game.hpp"
+	"menu.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"stb-master_lib/stb_image.h"
+	"stb-master_lib/stb_easy_font.h"
 

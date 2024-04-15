@@ -17,6 +17,9 @@
 #define HEIGHT 732
 #endif
 
+int sprite1ButtonPressed = 0;
+int sprite2ButtonPressed = 0;
+
 using namespace std;
 GLuint texture;
 GLuint background;
@@ -24,15 +27,6 @@ GLuint background;
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
-
-float button_weight = 100;
-float button_height = 32;
-
-void init_buttons() {
-    Menu_AddButton("Start", 32, 32, button_weight, button_height, 2);
-    Menu_AddButton("Pause", 32, 68, button_weight, button_height, 2);
-    Menu_AddButton("Exit", 32, 104, button_weight, button_height, 2);
-}
 
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
@@ -86,7 +80,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
     RECT rct;
     GetClientRect(hwnd, &rct);
     glOrtho(0,rct.right,0,rct.bottom,1,-1);
-    init_buttons();
+
+    Menu_AddButton("Action",10,10,100,30,2);
+    Menu_AddButton("Pause",10,50,100,30,2);
+    Menu_AddButton("Exit",10,90,100,30,2);
 
     Load_Texture( "fox.png", &texture, GL_REPEAT, GL_REPEAT, GL_NEAREST);
     Load_Texture( "background.jpg", &background, GL_REPEAT, GL_REPEAT, GL_NEAREST);
@@ -112,15 +109,18 @@ int WINAPI WinMain(HINSTANCE hInstance,
         {
             /* OpenGL animation code goes here */
 
-            glClearColor(0.55f, 0.15f, 0.0f, 0.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            if (sprite1ButtonPressed){
             Show_Background(background);
             Game(texture);
+            }
 
             glPushMatrix();
             glLoadIdentity();
             glOrtho(0,rct.right,rct.bottom,0,1,-1);
+
             Menu_ShowMenu();
             glPopMatrix();
 
@@ -142,9 +142,29 @@ int WINAPI WinMain(HINSTANCE hInstance,
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
 
-        case WM_CLOSE: PostQuitMessage(0); break;
-
         case WM_DESTROY: return 0;
+
+        case WM_MOUSEMOVE:
+            Menu_MouseMove(LOWORD(lParam), HIWORD(lParam));
+        break;
+
+        case WM_LBUTTONDOWN:
+{
+                int buttonId = Menu_MouseDown();
+                if (buttonId == 0)
+                {
+                    sprite1ButtonPressed = 1;
+                    sprite2ButtonPressed = 0;
+                                    }
+                else if (buttonId == 1)
+                {
+                    sprite1ButtonPressed = 0;
+                    sprite2ButtonPressed = 1;
+                }
+                else if (buttonId == 2)
+                    PostQuitMessage(0);
+            }
+            break;
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
