@@ -59,7 +59,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
         return 0;
 
     /* create main window */
-    hwnd = CreateWindowEx(0,
+    hwnd = CreateWindowEx(1,
                           "GLSample",
                           "OpenGL Sample",
                           WS_MINIMIZEBOX|WS_SYSMENU,
