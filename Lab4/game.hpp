@@ -102,8 +102,8 @@ struct Player {
 
         check = true;
         if (dx != 0) {
-            col = (dx < 0 ? x+dx : min(WIDTH-33, x+dx+w*scale))/32;
-            for (float cy=y; check && cy<min(HEIGHT-32, y+h*scale); cy+=16) {
+            col = (dx < 0 ? x+dx : min(WIDTH-33, x+dx+w*scale))/blockSize;
+            for (float cy=y; check && cy<min(HEIGHT-blockSize, y+h*scale); cy+=16) {
                 row = cy/blockSize;
                 check = check && (TileMap[21-row][col] == ' ');
             }

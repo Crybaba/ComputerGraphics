@@ -608,7 +608,7 @@
 	"stb-master_lib/stb_image.h"
 	"stb-master_lib/stb_easy_font.h"
 
-1713041813 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\game.cpp
+1713322934 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\game.cpp
 	<gl/gl.h>
 	<math.h>
 	<string>
@@ -616,7 +616,7 @@
 	"texture.hpp"
 	"stb-master_lib/stb_image.h"
 
-1713042318 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\game.hpp
+1713323093 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\game.hpp
 	<string>
 	<iostream>
 
@@ -665,7 +665,7 @@
 	"texture.hpp"
 	"stb-master_lib/stb_image.h"
 
-1713183079 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\main.cpp
+1713294418 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab4\main.cpp
 	<windows.h>
 	<gl/gl.h>
 	"texture.hpp"

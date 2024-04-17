@@ -9,7 +9,7 @@ Player player;
 
 
 void Game(GLuint texture) {
-    static float svertixFrame[] = { 0,0, 0,0, 0,0, 0,0 };
+    static float svertexFrame[] = { 0,0, 0,0, 0,0, 0,0 };
     static float TexCordFrame[] = { 0,0, 0,0, 0,0, 0,0 };
     static float tileCords[] = { 0,0, 0,0, 0,0, 0,0 };
 
@@ -35,10 +35,10 @@ void Game(GLuint texture) {
 
     player.iter();
 
-    svertixFrame[0] = svertixFrame[2] = player.x;
-    svertixFrame[1] = svertixFrame[7] = player.y;
-    svertixFrame[3] = svertixFrame[5] = player.y+player.h*player.scale;
-    svertixFrame[4] = svertixFrame[6] = player.x+player.w*player.scale;
+    svertexFrame[0] = svertexFrame[2] = player.x;
+    svertexFrame[1] = svertexFrame[7] = player.y;
+    svertexFrame[3] = svertexFrame[5] = player.y+player.h*player.scale;
+    svertexFrame[4] = svertexFrame[6] = player.x+player.w*player.scale;
 
     TexCordFrame[3] = TexCordFrame[5] = player.animation/3.;
     TexCordFrame[1] = TexCordFrame[7] = (player.animation+1)/3.;
@@ -52,7 +52,7 @@ void Game(GLuint texture) {
 
     GlSettingsOn(texture);
 
-    glVertexPointer(2,GL_FLOAT,0,svertixFrame);
+    glVertexPointer(2,GL_FLOAT,0,svertexFrame);
     glTexCoordPointer(2,GL_FLOAT,0,TexCordFrame);
     glDrawArrays(GL_TRIANGLE_FAN,0,4);
 
