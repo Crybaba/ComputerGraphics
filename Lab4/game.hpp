@@ -63,8 +63,8 @@ struct Player {
         checkGround();
 
         if (onGround) {
-            ++itr %= 40;
-            frame = itr/5;
+            ++itr;
+            frame = itr/8;
         } else {
             animation = 2;
             if (vy > 13) frame = 1;

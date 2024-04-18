@@ -11,13 +11,6 @@
 
 using namespace std;
 
-int spriteLine = 0;
-unsigned short frame = 0;
-
-void nextLine(int k) {
-    spriteLine = (spriteLine+3+k)%3;
-}
-
 void GlSettingsOn(GLuint texture) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -68,48 +61,6 @@ void Load_Texture( char *filename, GLuint *textureID, int swarp, int twarp, int 
                  tcnt == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
     glBindTexture(GL_TEXTURE_2D, 0);
     stbi_image_free(data);
-}
-
-void Show_Animation(GLuint texture) {
-
-    int frameW = 110;
-    int frameH = 80;
-
-    static float svertixLine[] = {
-        10, HEIGHT/2-50,
-        10, HEIGHT/2-50+frameH,
-        WIDTH-25, HEIGHT/2-50+frameH,
-        WIDTH-25, HEIGHT/2-50};
-
-    static float TexCordLine[] = {0,1, 0,0, 1,0, 1,1 };
-
-    static float svertixFrame[] = {
-        (WIDTH-frameW)/2.,HEIGHT/2+frameH,
-        (WIDTH-frameW)/2.,HEIGHT/2+2*frameH,
-        (WIDTH+frameW)/2.,HEIGHT/2+2*frameH,
-        (WIDTH+frameW)/2.,HEIGHT/2+frameH};
-
-    static float TexCordFrame[] = {0,1, 0,0, 1,0, 1,1 };
-
-    TexCordLine[1] = TexCordLine[7] = TexCordFrame[1] = TexCordFrame[7] = (spriteLine+1)/3.;
-    TexCordLine[3] = TexCordLine[5] = TexCordFrame[3] = TexCordFrame[5] = spriteLine/3.;
-
-    TexCordFrame[0] = TexCordFrame[2];
-    TexCordFrame[4] = TexCordFrame[6];
-
-    GlSettingsOn(texture);
-
-    glVertexPointer(2,GL_FLOAT,0,svertixLine);
-    glTexCoordPointer(2,GL_FLOAT,0,TexCordLine);
-    glDrawArrays(GL_TRIANGLE_FAN,0,4);
-
-    glVertexPointer(2,GL_FLOAT,0,svertixFrame);
-    glTexCoordPointer(2,GL_FLOAT,0,TexCordFrame);
-    glDrawArrays(GL_TRIANGLE_FAN,0,4);
-
-    GlSettingsOff();
-
-    ++frame;
 }
 
 void Show_Background(GLuint texture)
