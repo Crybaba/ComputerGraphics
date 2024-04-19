@@ -8,7 +8,7 @@
 Player player;
 
 
-void Game(GLuint texture) {
+void Game(GLuint texture, GLuint block) {
     static float svertexFrame[] = { 0,0, 0,0, 0,0, 0,0 };
     static float TexCordFrame[] = { 0,0, 0,0, 0,0, 0,0 };
     static float tileCords[] = { 0,0, 0,0, 0,0, 0,0 };
@@ -56,7 +56,6 @@ void Game(GLuint texture) {
     glTexCoordPointer(2,GL_FLOAT,0,TexCordFrame);
     glDrawArrays(GL_TRIANGLE_FAN,0,4);
 
-    GLuint block = LoadTexture("block.png");
     GLuint textureID = 0;
 
     glBindTexture(GL_TEXTURE_2D, 0);

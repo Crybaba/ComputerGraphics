@@ -1,32 +1,64 @@
 #include <windows.h>
 #include <gl/gl.h>
-#include "texture.hpp"
-#include "game.hpp"
-#include "menu.hpp"
+#include <math.h>
+#include <iostream>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "stb-master_lib/stb_image.h"
-#include "stb-master_lib/stb_easy_font.h"
-
-
-#define nameLen 20
-#ifndef WINDOW_SIZE
-#define WINDOW_SIZE
-#define WIDTH 1282
-#define HEIGHT 732
-#endif
-
-int sprite1ButtonPressed = 0;
-int sprite2ButtonPressed = 0;
+#include "camera.h"
 
 using namespace std;
-GLuint texture;
-GLuint background;
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
+
+float vert[] = {1,1,0, 1,-1,0, -1,-1,0, -1,1,0};
+float vertLine_Red[] = {1,1,-1, 1,1,1};
+
+void ShowWorld(){
+    glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, 0, &vert);
+        for (int i = -5; i < 5; i++){
+            for(int j = -5; j < 5; j++){
+                glPushMatrix();
+                    if((i+j)%2 == 0) glColor3f(0.41,0.41,0.41);
+                    else glColor3f(1,1,1);
+                    glTranslatef(i*2, j*2, 0);
+                    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+                glPopMatrix();
+            }
+        }
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void DrawLine(){
+    glLineWidth(5);
+    glBegin(GL_LINES);
+        glColor3f(1,0,0);
+        glVertex3f(1,1,1);
+        glVertex3f(1,1,10);
+
+        glColor3f(0,1,0);
+        glVertex3f(1,1,1);
+        glVertex3f(1,10,1);
+
+        glColor3f(0,0,1);
+        glVertex3f(1,1,1);
+        glVertex3f(10,1,1);
+    glEnd();
+}
+
+void glDrawStartTriangle(){
+    glBegin(GL_TRIANGLES);
+      glColor3f(1.0f, 0.0f, 0.0f);
+      glVertex3f(1.0f, 1.0f, 1.0f);
+
+      glColor3f(0.0f, 1.0f, 0.0f);
+      glVertex3f( 2.0f,  3.0f, 1.0f);
+
+      glColor3f(0.0f, 0.0f, 1.0f);
+      glVertex3f( 3.0f, 1.0f, 1.0f);
+    glEnd();
+}
 
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
@@ -39,6 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     HGLRC hRC;
     MSG msg;
     BOOL bQuit = FALSE;
+    float theta = 0.0f;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -59,14 +92,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
         return 0;
 
     /* create main window */
-    hwnd = CreateWindowEx(1,
+    hwnd = CreateWindowEx(0,
                           "GLSample",
                           "OpenGL Sample",
-                          WS_MINIMIZEBOX|WS_SYSMENU,
+                          WS_OVERLAPPEDWINDOW,
                           CW_USEDEFAULT,
                           CW_USEDEFAULT,
-                          WIDTH,
-                          HEIGHT,
+                          600,
+                          600,
                           NULL,
                           NULL,
                           hInstance,
@@ -77,17 +110,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
 
-    RECT rct;
-    GetClientRect(hwnd, &rct);
-    glOrtho(0,rct.right,0,rct.bottom,1,-1);
+    glEnable(GL_DEPTH_TEST);
 
-    Menu_AddButton("Action",10,10,100,30,2);
-    Menu_AddButton("Pause",10,50,100,30,2);
-    Menu_AddButton("Exit",10,90,100,30,2);
+    glFrustum(-1,1, -1,1, 2,80);
 
-    Load_Texture( "fox.png", &texture, GL_REPEAT, GL_REPEAT, GL_NEAREST);
-    Load_Texture( "background.jpg", &background, GL_REPEAT, GL_REPEAT, GL_NEAREST);
-    GLuint block = LoadTexture("block.png");
 
     /* program main loop */
     while (!bQuit)
@@ -111,23 +137,18 @@ int WINAPI WinMain(HINSTANCE hInstance,
             /* OpenGL animation code goes here */
 
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            if (sprite1ButtonPressed){
-            Show_Background(background);
-            Game(texture, block);
-            }
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glPushMatrix();
-            glLoadIdentity();
-            glOrtho(0,rct.right,rct.bottom,0,1,-1);
-
-            Menu_ShowMenu();
+                MoveCamera();
+                ShowWorld();
+                DrawLine();
+                glDrawStartTriangle();
             glPopMatrix();
 
-
             SwapBuffers(hDC);
-            Sleep(1);
+
+            Sleep (1);
         }
     }
 
@@ -140,32 +161,27 @@ int WINAPI WinMain(HINSTANCE hInstance,
     return msg.wParam;
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-
-        case WM_DESTROY: return 0;
-
-        case WM_MOUSEMOVE:
-            Menu_MouseMove(LOWORD(lParam), HIWORD(lParam));
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+        case WM_CLOSE:
+            PostQuitMessage(0);
         break;
 
-        case WM_LBUTTONDOWN:
-{
-                int buttonId = Menu_MouseDown();
-                if (buttonId == 0)
-                {
-                    sprite1ButtonPressed = 1;
-                    sprite2ButtonPressed = 0;
-                                    }
-                else if (buttonId == 1)
-                {
-                    sprite1ButtonPressed = 0;
-                    sprite2ButtonPressed = 1;
-                }
-                else if (buttonId == 2)
+        case WM_DESTROY:
+            return 0;
+
+        case WM_KEYDOWN:
+        {
+            switch (wParam)
+            {
+                case VK_ESCAPE:
                     PostQuitMessage(0);
+                break;
             }
-            break;
+        }
+        break;
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -180,8 +196,10 @@ void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 
     int iFormat;
 
+    /* get the device context (DC) */
     *hDC = GetDC(hwnd);
 
+    /* set the pixel format for the DC */
     ZeroMemory(&pfd, sizeof(pfd));
 
     pfd.nSize = sizeof(pfd);
@@ -197,6 +215,7 @@ void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 
     SetPixelFormat(*hDC, iFormat, &pfd);
 
+    /* create and enable the render context (RC) */
     *hRC = wglCreateContext(*hDC);
 
     wglMakeCurrent(*hDC, *hRC);

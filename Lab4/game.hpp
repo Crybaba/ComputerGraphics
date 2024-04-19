@@ -147,6 +147,6 @@ struct Player {
     }
 };
 
-void Game(GLuint texture);
+void Game(GLuint texture, GLuint block);
 
 #endif // GAME_HPP
