@@ -6,7 +6,7 @@
 const float pi = 3.14159265358979323846;
 float xAlpha = 20;
 float zAlpha = 0;
-POINTFLOAT pos = {0,0};
+POINTFLOAT pos = {2,1};
 
 void MoveCamera(){
     if(GetKeyState(VK_UP) < 0) xAlpha = ++xAlpha > 180 ? 180 : xAlpha;

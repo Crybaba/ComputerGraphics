@@ -29,3 +29,18 @@
 
 1683079186 c:\users\profile\desktop\cg\lab5_cg\lab_5\camera.h
 
+1713609649 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+
+1713610109 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+
+1683079186 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.h
+

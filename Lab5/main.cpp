@@ -20,8 +20,8 @@ void ShowWorld(){
         for (int i = -5; i < 5; i++){
             for(int j = -5; j < 5; j++){
                 glPushMatrix();
-                    if((i+j)%2 == 0) glColor3f(0.41,0.41,0.41);
-                    else glColor3f(1,1,1);
+                    if((i+j)%2 == 0) glColor3f(0.4,0.4,0);
+                    else glColor3f(1,0.8,1);
                     glTranslatef(i*2, j*2, 0);
                     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
                 glPopMatrix();
@@ -31,7 +31,7 @@ void ShowWorld(){
 }
 
 void DrawLine(){
-    glLineWidth(5);
+    glLineWidth(2);
     glBegin(GL_LINES);
         glColor3f(1,0,0);
         glVertex3f(1,1,1);
@@ -48,6 +48,7 @@ void DrawLine(){
 }
 
 void glDrawStartTriangle(){
+    glPushMatrix();
     glBegin(GL_TRIANGLES);
       glColor3f(1.0f, 0.0f, 0.0f);
       glVertex3f(1.0f, 1.0f, 1.0f);
@@ -58,6 +59,7 @@ void glDrawStartTriangle(){
       glColor3f(0.0f, 0.0f, 1.0f);
       glVertex3f( 3.0f, 1.0f, 1.0f);
     glEnd();
+    glPopMatrix();
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -71,7 +73,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     HGLRC hRC;
     MSG msg;
     BOOL bQuit = FALSE;
-    float theta = 0.0f;
+    float theta = 1.0f;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -113,7 +115,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     glEnable(GL_DEPTH_TEST);
 
     glFrustum(-1,1, -1,1, 2,80);
-
 
     /* program main loop */
     while (!bQuit)
@@ -171,6 +172,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_DESTROY:
             return 0;
+
+        case WM_MOUSEMOVE:
 
         case WM_KEYDOWN:
         {
