@@ -7,6 +7,8 @@
 
 using namespace std;
 
+bool isPlaying = true;
+
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
@@ -47,8 +49,11 @@ void DrawLine(){
     glEnd();
 }
 
-void glDrawStartTriangle(){
+void glDrawStartTriangle(float theta){
     glPushMatrix();
+    glTranslatef(2.0,2.0,0);
+    glRotatef(theta,0,0,1);
+    glTranslatef(-2.0,-2.0,0);
     glBegin(GL_TRIANGLES);
       glColor3f(1.0f, 0.0f, 0.0f);
       glVertex3f(1.0f, 1.0f, 1.0f);
@@ -60,6 +65,14 @@ void glDrawStartTriangle(){
       glVertex3f( 3.0f, 1.0f, 1.0f);
     glEnd();
     glPopMatrix();
+}
+
+void MoveCamera() {
+    Camera_MoveDirectional(
+        GetKeyState('W') < 0 ? 1 : GetKeyState('S') < 0 ? -1 : 0,
+        GetKeyState('D') < 0 ? 1 : GetKeyState('A') < 0 ? -1 : 0,
+        0.1);
+    Camera_AutoMoveByMouse(400, 400, 0.1);
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -100,8 +113,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                           WS_OVERLAPPEDWINDOW,
                           CW_USEDEFAULT,
                           CW_USEDEFAULT,
-                          600,
-                          600,
+                          1000,
+                          1000,
                           NULL,
                           NULL,
                           hInstance,
@@ -109,6 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     ShowWindow(hwnd, nCmdShow);
 
+    ShowCursor(FALSE);
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
 
@@ -141,15 +155,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glPushMatrix();
-                MoveCamera();
+                if (isPlaying && GetForegroundWindow() == hwnd) {
+                    MoveCamera();
+            }
+                Camera_Apply();
                 ShowWorld();
                 DrawLine();
-                glDrawStartTriangle();
+                glDrawStartTriangle(theta);
             glPopMatrix();
 
             SwapBuffers(hDC);
 
             Sleep (1);
+            theta++;
         }
     }
 

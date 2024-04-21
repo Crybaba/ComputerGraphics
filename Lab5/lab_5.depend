@@ -29,18 +29,19 @@
 
 1683079186 c:\users\profile\desktop\cg\lab5_cg\lab_5\camera.h
 
-1713609649 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\camera.cpp
+1713698910 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\camera.cpp
 	<windows.h>
 	<gl/gl.h>
-	<math.h>
+	"camera.h"
 	<iostream>
+	<math.h>
 
-1713610109 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\main.cpp
+1713698573 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\main.cpp
 	<windows.h>
 	<gl/gl.h>
 	<math.h>
 	<iostream>
 	"camera.h"
 
-1683079186 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\camera.h
+1713697485 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab5\camera.h
 
