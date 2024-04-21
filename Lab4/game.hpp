@@ -7,6 +7,7 @@
 #define HEIGHT 732
 #endif // WINDOW_SIZE
 
+
 #include <string>
 #include <iostream>
 inline float min(float a, float b) {
@@ -51,7 +52,7 @@ struct Player {
     bool onGround = true;
     short direction = 1;
     const short w = 110, h=80;
-    float scale = 0.75;
+    float scale = 1.75;
     int blockSize = 32;
 
     int animation = 0, frame = 0, itr = 0;

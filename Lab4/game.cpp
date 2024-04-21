@@ -7,7 +7,6 @@
 
 Player player;
 
-
 void Game(GLuint texture, GLuint block) {
     static float svertexFrame[] = { 0,0, 0,0, 0,0, 0,0 };
     static float TexCordFrame[] = { 0,0, 0,0, 0,0, 0,0 };
@@ -49,6 +48,15 @@ void Game(GLuint texture, GLuint block) {
         TexCordFrame[4] = TexCordFrame[6] = player.frame/7.;
         TexCordFrame[0] = TexCordFrame[2] = (player.frame+1)/7.;
     }
+
+    float LineVertices[8] = {player.x,player.y, player.x+player.w*player.scale,player.y, player.x+player.w*player.scale,player.y+player.h*player.scale, player.x,player.h*player.scale+player.y};
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2,GL_FLOAT,0, LineVertices);
+    glColor3f(1.0,1.0,1.0);
+    glLineWidth(2);
+    glDrawArrays(GL_LINE_LOOP,0,4);
+    glDisable(GL_VERTEX_ARRAY);
 
     GlSettingsOn(texture);
 

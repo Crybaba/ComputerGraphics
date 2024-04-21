@@ -89,6 +89,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     Load_Texture( "background.jpg", &background, GL_REPEAT, GL_REPEAT, GL_NEAREST);
     GLuint block = LoadTexture("block.png");
 
+
     /* program main loop */
     while (!bQuit)
     {
@@ -116,6 +117,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
             if (sprite1ButtonPressed){
             Show_Background(background);
             Game(texture, block);
+
             }
 
             glPushMatrix();
