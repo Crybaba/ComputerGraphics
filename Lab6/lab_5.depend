@@ -1,0 +1,88 @@
+# depslib dependency file v1.0
+1683079173 source:c:\users\profile\desktop\lab5_cg\lab_5\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+
+1683079186 c:\users\profile\desktop\lab5_cg\lab_5\camera.h
+
+1683079196 source:c:\users\profile\desktop\lab5_cg\lab_5\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+
+1683079196 source:c:\users\profile\desktop\cg\lab5_cg\lab_5\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+
+1683338236 source:c:\users\profile\desktop\cg\lab5_cg\lab_5\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+
+1683079186 c:\users\profile\desktop\cg\lab5_cg\lab_5\camera.h
+
+1713698910 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	"camera.h"
+	<iostream>
+	<math.h>
+
+1713699032 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+
+1713697485 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.h
+
+1713698910 source:c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	"camera.h"
+	<iostream>
+	<math.h>
+
+1713697485 c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab5\camera.h
+
+1713699032 source:c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab5\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+
+1713698910 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	"camera.h"
+	<iostream>
+	<math.h>
+
+1713697485 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\camera.h
+
+1683340458 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\light.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+
+1714528937 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+	"light.h"
+
+1683082589 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\light.h
+
