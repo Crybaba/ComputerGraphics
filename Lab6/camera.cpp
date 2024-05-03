@@ -6,7 +6,7 @@
 #include <math.h>
 
 // struct SCamera camera={0,0,1.7, 0,0};
-struct SCamera camera = camera={0,0,3, 285, 331};
+struct SCamera camera ={-3,-3,3, 400, 500};
 
 void Camera_Apply() {
     glRotatef(-camera.Xrot, 1, 0, 0);

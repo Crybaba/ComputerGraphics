@@ -15,7 +15,7 @@ void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
 float vert[] = {1,1,0, 1,-1,0, -1,-1,0, -1,1,0};
-float bulb[] = {1,1,7, 1,-1,7, -1,-1,7, -1,1,7};
+float bulb[] = {1,1,10, 1,-1,10, -1,-1,10, -1,1,10};
 
 void ShowWorld(){
     glNormal3f(0,0,1);
@@ -36,11 +36,12 @@ void ShowWorld(){
 }
 
 void draw(){
-    glNormal3f(0,0,-1);
+    glDisable(GL_LIGHTING);
     glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(3, GL_FLOAT, 0, &bulb);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        glDrawArrays(GL_QUADS, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
+    glEnable(GL_LIGHTING);
 }
 
 void Draw_Cube(){
@@ -123,7 +124,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
     MSG msg;
     BOOL bQuit = FALSE;
     float theta = 1.0f;
-    float radius = 10;
+    float radius = 3;
+    float bulb_x;
+    float bulb_y;
+    float angle;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -211,7 +215,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 glPopMatrix();
 
                 glPushMatrix();
-                    glRotatef(theta, 0,0,1);
+                    bulb_x = radius * cos(theta*M_PI/180);
+                    bulb_y = radius * sin(theta*M_PI/180);
+
+                    glTranslatef(2+bulb_x, 2+ bulb_y, 0);
+                    angle = atan2(bulb_y, bulb_x) * 180 / M_PI + 90;
+                    glRotatef(angle, 0,0,1);
+                    glRotatef(30, 1, 0, 0);
+
                     on_light();
                     glColor3f(1,1,1);
                     draw();

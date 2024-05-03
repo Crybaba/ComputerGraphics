@@ -61,7 +61,7 @@
 	<iostream>
 	"camera.h"
 
-1713698910 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\camera.cpp
+1714741435 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\camera.cpp
 	<windows.h>
 	<gl/gl.h>
 	"camera.h"
@@ -70,13 +70,13 @@
 
 1713697485 c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\camera.h
 
-1714740386 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\light.cpp
+1714743008 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\light.cpp
 	<windows.h>
 	<gl/gl.h>
 	<math.h>
 	<iostream>
 
-1714740454 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\main.cpp
+1714743300 source:c:\users\goode\desktop\Äåëà ó÷åáíûå\3 ñåìàê\Ãðàôèêà\computergraphics\lab6\main.cpp
 	<windows.h>
 	<gl/gl.h>
 	<math.h>
