@@ -15,8 +15,7 @@ void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
 float vert[] = {1,1,0, 1,-1,0, -1,-1,0, -1,1,0};
-float vert1[] = {1,1,5, 1,-1,5, -1,-1,5, -1,1,5};
-float positionLight[] = {-1,-1,1,0};
+float bulb[] = {1,1,7, 1,-1,7, -1,-1,7, -1,1,7};
 
 void ShowWorld(){
     glNormal3f(0,0,1);
@@ -37,8 +36,9 @@ void ShowWorld(){
 }
 
 void draw(){
+    glNormal3f(0,0,-1);
     glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, &vert1);
+        glVertexPointer(3, GL_FLOAT, 0, &bulb);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -123,6 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     MSG msg;
     BOOL bQuit = FALSE;
     float theta = 1.0f;
+    float radius = 10;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -203,19 +204,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 ShowWorld();
                 glPushMatrix();
                     Draw_Cube();
-                    glTranslatef(3,3,0);
+                    glTranslatef(3,3,1);
                     Draw_Cube();
-                    glTranslatef(-5,3,0);
+                    glTranslatef(-5,3,1);
                     Draw_Cube();
                 glPopMatrix();
 
                 glPushMatrix();
-                    glTranslatef(2, 0.0, 1);		//начальный сдвиг системы координат
-                    glRotatef(theta, 0.0, 1.0, 0.0);
+                    glRotatef(theta, 0,0,1);
                     on_light();
                     glColor3f(1,1,1);
                     draw();
                 glPopMatrix();
+
             glPopMatrix();
 
             SwapBuffers(hDC);

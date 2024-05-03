@@ -70,13 +70,13 @@
 
 1713697485 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\camera.h
 
-1683340458 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\light.cpp
+1714740386 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\light.cpp
 	<windows.h>
 	<gl/gl.h>
 	<math.h>
 	<iostream>
 
-1714528937 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\main.cpp
+1714740454 source:c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\main.cpp
 	<windows.h>
 	<gl/gl.h>
 	<math.h>
@@ -85,4 +85,29 @@
 	"light.h"
 
 1683082589 c:\users\goode\desktop\Дела учебные\3 семак\Графика\computergraphics\lab6\light.h
+
+1713698910 source:c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab6\camera.cpp
+	<windows.h>
+	<gl/gl.h>
+	"camera.h"
+	<iostream>
+	<math.h>
+
+1713697485 c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab6\camera.h
+
+1714725298 source:c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab6\light.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+
+1714712180 source:c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab6\main.cpp
+	<windows.h>
+	<gl/gl.h>
+	<math.h>
+	<iostream>
+	"camera.h"
+	"light.h"
+
+1683082589 c:\users\me\desktop\Облако\Другие компьютеры\ПК\Дела учебные\3 семак\Графика\computergraphics\lab6\light.h
 
