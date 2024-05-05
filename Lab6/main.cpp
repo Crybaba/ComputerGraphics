@@ -227,13 +227,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 glPushMatrix();
                     bulb_x = radius * cos(theta*M_PI/180);
                     bulb_y = radius * sin(theta*M_PI/180);
-                    on_light(bulb_x, bulb_y);
 
                     glPushMatrix();
                     glTranslatef(bulb_x, bulb_y, 0);
                     angle = atan2(bulb_y, bulb_x) * 180 / M_PI + 90;
                     glRotatef(angle, 0,0,1);
-                    glRotatef(30, 1, 0, 0);
+                    glRotatef(40, 1, 0, 0);
+                    on_light();
                     glColor3f(1,1,1);
                     draw();
                     glPopMatrix();

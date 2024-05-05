@@ -2,7 +2,7 @@
 #define LIGHT_H_INCLUDED
 
 void Init_Material();
-void Init_Light(float bulb_x, float bulb_y);
-void on_light(float bulb_x, float bulb_y);
+void Init_Light();
+void on_light();
 
 #endif // LIGHT_H_INCLUDED
