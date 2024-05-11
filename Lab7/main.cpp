@@ -37,7 +37,6 @@ void ShowWorld(){
 
 void drawPrisma(float weight, float height, int storon, float x, float y, float z, float transparency) {
     float angle = (2 * M_PI) / storon;
-    float halfHeight = height / 2.0f;
 
     glPushMatrix();
 
@@ -138,66 +137,6 @@ void draw(){
     glEnable(GL_LIGHTING);
 }
 
-void Draw_Cube(){
-    GLfloat vertices[] = {
-     -1.f, -1.f, 0.f,
-     1.f, -1.f, 0.f,
-     1.f, 1.f, 0.f,
-     -1.f, 1.f, 0.f,
-     -1.f, -1.f, 2.f,
-     1.f, -1.f, 2.f,
-     1.f, 1.f, 2.f,
-     -1.f, 1.f, 2.f
-    };
-    GLuint indices[] = {
-     0, 1, 2,
-     2, 3, 0,
-     1, 5, 6,
-     6, 2, 1,
-     7, 6, 5,
-     5, 4, 7,
-     4, 0, 3,
-     3, 7, 4,
-     4, 5, 1,
-     1, 0, 4,
-     3, 2, 6,
-     6, 7, 3
-    };
-    GLfloat normals[] = {
-     0.0f, 0.0f, -1.0f,
-     0.0f, 0.0f, -1.0f,
-     0.0f, 0.0f, -1.0f,
-     0.0f, 0.0f, -1.0f,
-     0.0f, 0.0f, 1.0f,
-     0.0f, 0.0f, 1.0f,
-     0.0f, 0.0f, 1.0f,
-     0.0f, 0.0f, 1.0f,
-     -1.0f, 0.0f, 0.0f,
-     -1.0f, 0.0f, 0.0f,
-     -1.0f, 0.0f, 0.0f,
-     -1.0f, 0.0f, 0.0f,
-     1.0f, 0.0f, 0.0f,
-     1.0f, 0.0f, 0.0f,
-     1.0f, 0.0f, 0.0f,
-     1.0f, 0.0f, 0.0f,
-     0.0f, -1.0f, 0.0f,
-     0.0f, -1.0f, 0.0f,
-     0.0f, -1.0f, 0.0f,
-     0.0f, -1.0f, 0.0f,
-     0.0f, 1.0f, 0.0f,
-     0.0f, 1.0f, 0.0f,
-     0.0f, 1.0f, 0.0f,
-     0.0f, 1.0f, 0.0f
-    };
-    glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, vertices);
-        glEnableClientState(GL_NORMAL_ARRAY);
-            glNormalPointer(GL_FLOAT, 0, normals);
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, indices);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-}
-
 void MoveCamera() {
     Camera_MoveDirectional(
         GetKeyState('W') < 0 ? 1 : GetKeyState('S') < 0 ? -1 : 0,
@@ -222,6 +161,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
     float bulb_x;
     float bulb_y;
     float angle;
+    int cnt;
+    float prism_x;
+    float prism_y;
+    float transparency;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -300,17 +243,20 @@ int WINAPI WinMain(HINSTANCE hInstance,
             }
                 Camera_Apply();
                 ShowWorld();
+                cnt = 8;
+                transparency = 1.0;
                 glPushMatrix();
                     glTranslatef(-1,-1,0.1);
                     DrawLine();
-                    drawPrisma(1,2,15,6,0,0,1);
-                    drawPrisma(1,2,15,4.7,4.7,0,0.9);
-                    drawPrisma(1,2,15,0,6,0,0.8);
-                    drawPrisma(1,2,15,-4.7,4.7,0,0.6);
-                    drawPrisma(1,2,15,-6,0,0,0.5);
-                    drawPrisma(1,2,15,-4.7,-4.7,0,0.3);
-                    drawPrisma(1,2,15,0,-6,0,0.2);
-                    drawPrisma(1,2,15,4.7,-4.7,0,0.1);
+
+                    for (int i = 0; i <= cnt; i++)
+                    {
+                        prism_x = cos((2*M_PI/cnt)*i)*6;
+                        prism_y = sin((2*M_PI/cnt)*i)*6;
+                        drawPrisma(1,2,15,prism_x,prism_y,0,transparency);
+                        transparency -= 0.1;
+                    }
+
                 glPopMatrix();
 
                 glPushMatrix();
