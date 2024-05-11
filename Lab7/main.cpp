@@ -41,7 +41,6 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
     glPushMatrix();
 
         glTranslatef(x, y, z);
-        glBegin(GL_TRIANGLES);
         glEnable(GL_NORMALIZE);
         for (int i = 0; i < storon; ++i) {
             GLfloat mat_diffuse[] = { 1.0f, 1.0f, 1.0f, transparency };
@@ -53,12 +52,10 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             float x1 = (weight * cos(i * angle));
             float y1 = (weight * sin(i * angle));
 
-
             float x2 = (weight * cos((i + 1) * angle));
             float y2 = (weight * sin((i + 1) * angle));
 
-
-
+            glBegin(GL_TRIANGLES);
             // боковой треугольник 1
             glNormal3f(x1, y1, 0);
             glVertex3f(x1*1.5, y1*1.5, 0);
@@ -66,7 +63,9 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             glVertex3f(x2*1.5, y2*1.5, 0);
             glNormal3f(x1, y1, 0);
             glVertex3f(x1/1.5, y1/1.5, height/2);
+            glEnd();
 
+            glBegin(GL_TRIANGLES);
             // боковой треугольник 2
             glNormal3f(x1, y1, 0);
             glVertex3f(x1/1.5, y1/1.5, height/2);
@@ -74,7 +73,9 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             glVertex3f(x2*1.5, y2*1.5, 0);
             glNormal3f(x2, y2, 0);
             glVertex3f(x2/1.5, y2/1.5, height/2);
+            glEnd();
 
+            glBegin(GL_TRIANGLES);
             // боковой треугольник 3
             glNormal3f(x1, y1, 0);
             glVertex3f(x1/1.5, y1/1.5, height/2);
@@ -82,7 +83,9 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             glVertex3f(x2/1.5, y2/1.5, height/2);
             glNormal3f(x1, y1, 0);
             glVertex3f(x1*1.5, y1*1.5, height);
+            glEnd();
 
+            glBegin(GL_TRIANGLES);
             // боковой треугольник 4
             glNormal3f(x1, y1, 0);
             glVertex3f(x1*1.5, y1*1.5, height);
@@ -90,21 +93,62 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             glVertex3f(x2/1.5, y2/1.5, height/2);
             glNormal3f(x2, y2, 0);
             glVertex3f(x2*1.5, y2*1.5, height);
+            glEnd();
 
+            glBegin(GL_TRIANGLES);
             // низ
             glNormal3f(0.0f, 0.0f, 1.0f);
             glVertex3f(0.0f, 0.0f, 0);
             glVertex3f(x2*1.5, y2*1.5, 0);
             glVertex3f(x1*1.5, y1*1.5, 0);
+            glEnd();
 
+            glBegin(GL_TRIANGLES);
             // верх
             glNormal3f(0.0f, 0.0f, 1.0f);
             glVertex3f(0.0f, 0.0f, height);
-            glVertex3f(x2*1.5, y2*1.5, height);
             glVertex3f(x1*1.5, y1*1.5, height);
-        }
+            glVertex3f(x2*1.5, y2*1.5, height);
+            glEnd();
 
-        glEnd();
+            glColor4f(1, 1, 1, transparency);
+
+            glBegin(GL_LINE_LOOP);
+            // боковой треугольник 1
+            glVertex3f(x1*1.5, y1*1.5, 0);
+            glVertex3f(x2*1.5, y2*1.5, 0);
+            glVertex3f(x1/1.5, y1/1.5, height/2);
+            glEnd();
+
+            glBegin(GL_LINE_LOOP);
+            // боковой треугольник 2
+            glVertex3f(x1/1.5, y1/1.5, height/2);
+            glVertex3f(x2*1.5, y2*1.5, 0);
+            glVertex3f(x2/1.5, y2/1.5, height/2);
+            glEnd();
+
+            glBegin(GL_LINE_LOOP);
+            // боковой треугольник 3
+            glVertex3f(x1/1.5, y1/1.5, height/2);
+            glVertex3f(x2/1.5, y2/1.5, height/2);
+            glVertex3f(x1*1.5, y1*1.5, height);
+            glEnd();
+
+            glBegin(GL_LINE_LOOP);
+            // низ
+            glVertex3f(0.0f, 0.0f, 0);
+            glVertex3f(x2*1.5, y2*1.5, 0);
+            glVertex3f(x1*1.5, y1*1.5, 0);
+            glEnd();
+
+            glBegin(GL_LINE_LOOP);
+            // верх
+            glVertex3f(0.0f, 0.0f, height);
+            glVertex3f(x1*1.5, y1*1.5, height);
+            glVertex3f(x2*1.5, y2*1.5, height);
+            glEnd();
+
+        }
 
     glPopMatrix();
 }
