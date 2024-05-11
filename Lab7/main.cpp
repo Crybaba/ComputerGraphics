@@ -47,7 +47,7 @@ void drawPrisma(float weight, float height, int storon, float x, float y, float 
             GLfloat mat_ambient[] = { 1.0f, 1.0f, 1.0f, transparency };
             glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
             glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-            glColor4f(0.91, 0.761, 0.76, transparency);
+            glColor4f(0.91, 0.423, 0.76, transparency);
 
             float x1 = (weight * cos(i * angle));
             float y1 = (weight * sin(i * angle));
